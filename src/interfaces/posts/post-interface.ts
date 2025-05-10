@@ -1,3 +1,5 @@
+import { PostRootStylesProps } from "@/components/Post/PostRoot/PostRoot-Styles";
+
 export interface PostModelprops {
   id: string;
   title: string;
@@ -29,7 +31,10 @@ export interface PostTextProps {
   children: React.ReactNode;
 }
 
-export interface PostRootProps {
+export interface PostTimeProps {
+  children: React.ReactNode;
+}
+export interface PostRootProps extends PostRootStylesProps {
   children: React.ReactNode;
   href?: string;
 }

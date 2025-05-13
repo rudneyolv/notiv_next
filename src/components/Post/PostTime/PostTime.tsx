@@ -1,9 +1,9 @@
 import { PostTimeProps } from "@/interfaces/posts/post-interface";
 import { PostTimeStyles } from "./PostTime-Styles";
 
-export const PostTime = ({ children }: PostTimeProps) => {
+export const PostTime = ({ children, title, datetime }: PostTimeProps) => {
   return (
-    <time className={PostTimeStyles()} dateTime="2025-05-20">
+    <time className={PostTimeStyles()} dateTime={datetime} title={title}>
       {children}
     </time>
   );

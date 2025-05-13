@@ -33,6 +33,8 @@ export interface PostTextProps {
 
 export interface PostTimeProps {
   children: React.ReactNode;
+  title: string;
+  datetime: string;
 }
 export interface PostRootProps extends PostRootStylesProps {
   children: React.ReactNode;

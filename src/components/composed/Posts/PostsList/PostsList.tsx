@@ -1,5 +1,9 @@
 import { Post } from "@/components/Post";
 import { posts } from "@/constants/posts.mock";
+import {
+  formatDatetime,
+  formatRelativeDateToNow,
+} from "@/utils/format-datetime";
 
 export const PostsList = () => {
   return (
@@ -8,7 +12,12 @@ export const PostsList = () => {
         <Post.Root variant="col" key={post.id} href={`/post/${post.slug}`}>
           <Post.Image src={post.coverImageUrl} alt={post.title} />
           <Post.Content>
-            <Post.Time>{post.createdAt}</Post.Time>
+            <Post.Time
+              datetime={post.createdAt}
+              title={formatDatetime(post.createdAt)}
+            >
+              {formatRelativeDateToNow(post.createdAt)}
+            </Post.Time>
             <Post.Heading>{post.title}</Post.Heading>
             <Post.Text>{post.content}</Post.Text>
           </Post.Content>

@@ -9,7 +9,7 @@ export const formatDatetime = (rawDate: string): string => {
   });
 };
 
-export const formatRelativeDate = (rawDate: string): string => {
+export const formatRelativeDateToNow = (rawDate: string): string => {
   const date = new Date(rawDate);
 
   return formatDistanceToNow(date, {

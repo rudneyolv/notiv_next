@@ -1,4 +1,6 @@
-import { PostsList } from "@/components/composed/Posts/PostsList/PostsList";
+/** @format */
+
+import { PostsList } from "@/app/(home)/components/PostsList/PostsList";
 import { Heading } from "@/components/Heading/Heading";
 import { Post } from "@/components/Post";
 
@@ -14,10 +16,9 @@ export default function Home() {
             <Post.Time />
             <Post.Heading>Lorem ipsum dolor</Post.Heading>
             <Post.Text>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Consectetur, optio quae! Laborum fugiat modi animi, dolore quae
-              aut, molestias vel veniam minima ipsam earum. Placeat non et
-              nostrum architecto suscipit.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, optio quae!
+              Laborum fugiat modi animi, dolore quae aut, molestias vel veniam minima ipsam earum.
+              Placeat non et nostrum architecto suscipit.
             </Post.Text>
           </Post.Content>
         </Post.Root>

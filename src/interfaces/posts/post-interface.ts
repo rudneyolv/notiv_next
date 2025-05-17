@@ -1,6 +1,6 @@
 import { PostRootStylesProps } from "@/components/Post/PostRoot/PostRoot-Styles";
 
-export interface PostModelprops {
+export interface PostDataProps {
   id: string;
   title: string;
   slug: string;

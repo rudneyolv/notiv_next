@@ -1,3 +1,5 @@
+/** @format */
+
 import { PostRootStylesProps } from "@/components/Post/PostRoot/PostRoot-Styles";
 
 export interface PostDataProps {
@@ -39,4 +41,5 @@ export interface PostTimeProps {
 export interface PostRootProps extends PostRootStylesProps {
   children: React.ReactNode;
   href?: string;
+  className?: string;
 }

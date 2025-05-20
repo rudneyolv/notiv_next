@@ -3,6 +3,8 @@
 import { PostsList } from "@/app/(home)/components/PostsList/PostsList";
 import { Heading } from "@/components/Heading/Heading";
 import { Post } from "@/components/Post";
+import { Text } from "@/components/Text/Text";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -10,7 +12,7 @@ export default function Home() {
       <div className=" min-h-screen max-w-[1000px] p-12 flex flex-col gap-4">
         <Heading>Teste</Heading>
 
-        <Post.Root variant="row">
+        <Post.Root variant="row" className="">
           <Post.Image src="/images/bryen_0.png" alt="post_title" />
           <Post.Content>
             <Post.Time />
@@ -23,7 +25,9 @@ export default function Home() {
           </Post.Content>
         </Post.Root>
 
-        <PostsList />
+        <Suspense fallback={<Text className="font-bold animate-pulse uppercase">Loading</Text>}>
+          <PostsList />
+        </Suspense>
       </div>
     </div>
   );

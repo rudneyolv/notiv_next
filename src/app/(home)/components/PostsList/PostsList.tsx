@@ -15,7 +15,6 @@ export const PostsList = async () => {
   try {
     posts = await postsRepositoryInstance.fetchPosts();
   } catch (error) {
-    console.log(error);
     const errorMessage = isError(error) ? error.message : "Erro ao buscar posts";
     return <Text>{errorMessage}</Text>;
   }

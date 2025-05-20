@@ -19,6 +19,10 @@ export const PostsList = async () => {
     return <Text>{errorMessage}</Text>;
   }
 
+  if (posts.length === 0) {
+    return <Text>Nenhum post foi encontrado...</Text>;
+  }
+
   return (
     <div className="grid grid-cols-2">
       {posts.map((post) => (

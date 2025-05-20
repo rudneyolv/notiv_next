@@ -24,6 +24,10 @@ export default async function PostDetails({ slug }: PostDetailsProps) {
     return <Text>{errorMessage}</Text>;
   }
 
+  if (!post) {
+    return <Text>Post não encontrado...</Text>;
+  }
+
   return (
     <Post.Root variant="col" key={post.id}>
       <Post.Image src={post.coverImageUrl} alt={post.title} />

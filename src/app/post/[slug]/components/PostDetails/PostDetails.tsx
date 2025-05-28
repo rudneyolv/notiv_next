@@ -1,6 +1,6 @@
 /** @format */
 
-import CustomLink from "@/components/CustomLink/CustomLink";
+import { Markdown } from "@/components/Markdown/Markdown";
 import { Post } from "@/components/Post";
 import { Text } from "@/components/Text/Text";
 import { PostDataProps } from "@/interfaces/posts/post-interface";
@@ -32,11 +32,15 @@ export default async function PostDetails({ slug }: PostDetailsProps) {
     <Post.Root variant="col" key={post.id}>
       <Post.Image src={post.coverImageUrl} alt={post.title} />
       <Post.Content>
-        <Post.Time datetime={post.createdAt} title={formatDatetime(post.createdAt)}>
-          {formatRelativeDateToNow(post.createdAt)}
-        </Post.Time>
+        <div>
+          <Post.Text>{post.author}</Post.Text>
+          <Post.Time datetime={post.createdAt} title={formatDatetime(post.createdAt)}>
+            {formatRelativeDateToNow(post.createdAt)}
+          </Post.Time>
+        </div>
+
         <Post.Heading>{post.title}</Post.Heading>
-        <Post.Text>{post.excerpt}</Post.Text>
+        <Markdown markdown={post.content} />
       </Post.Content>
     </Post.Root>
   );

@@ -1,9 +1,10 @@
 /** @format */
 
 import { PostDataProps } from "@/interfaces/posts/post-interface";
+import { cache } from "react";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 export class PostsRepository {
   public fetchPosts = async (): Promise<PostDataProps[]> => {
@@ -11,13 +12,13 @@ export class PostsRepository {
       const response = await fetch(`${apiUrl}/posts`, {
         method: "GET",
         next: {
-          revalidate: 60,
+          revalidate: 10,
           tags: ["posts"],
         },
       });
       const posts = await response.json();
 
-      await delay(2000);
+      await delay();
 
       return posts;
     } catch (error: unknown) {
@@ -31,7 +32,7 @@ export class PostsRepository {
     }
   };
 
-  public fetchBySlug = async (slug: string): Promise<PostDataProps> => {
+  public fetchBySlug = cache(async (slug: string): Promise<PostDataProps> => {
     try {
       const response = await fetch(`${apiUrl}/posts?slug=${slug}`, {
         method: "GET",
@@ -42,7 +43,7 @@ export class PostsRepository {
         },
       });
 
-      await delay(2000);
+      await delay();
 
       const [post] = await response.json();
       return post;
@@ -55,5 +56,5 @@ export class PostsRepository {
 
       throw new Error("Erro desconhecido ao buscar o post");
     }
-  };
+  });
 }

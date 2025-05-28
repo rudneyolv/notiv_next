@@ -24,7 +24,7 @@ export const PostsList = async () => {
   }
 
   return (
-    <div className="grid grid-cols-2">
+    <div className="grid md:grid-cols-2">
       {posts.map((post) => (
         <Post.Root variant="col" key={post.id} href={`/post/${post.slug}`}>
           <Post.Image src={post.coverImageUrl} alt={post.title} />

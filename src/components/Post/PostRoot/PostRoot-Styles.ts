@@ -1,3 +1,5 @@
+/** @format */
+
 import { cva, VariantProps } from "class-variance-authority";
 
 export const PostRootStyles = cva(

@@ -37,8 +37,6 @@ export const PostsList = async () => {
           </Post.Content>
         </Post.Root>
       ))}
-
-      {posts.length === 0 && <Text>Nenhum post foi encontrado </Text>}
     </div>
   );
 };

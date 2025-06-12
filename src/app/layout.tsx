@@ -1,7 +1,10 @@
+/** @format */
+
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { Sofia_Sans } from "next/font/google";
 import { Footer } from "@/components/Footer/Footer";
+import { Header } from "@/components/Header/Header";
 
 export const metadata: Metadata = {
   title: {
@@ -26,7 +29,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased ${sofiaSans.className}`}>
+      <body className={`antialiased dark ${sofiaSans.className}`}>
+        <Header />
         {children}
         <Footer />
       </body>

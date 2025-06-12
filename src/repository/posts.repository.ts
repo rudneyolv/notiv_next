@@ -4,7 +4,7 @@ import { PostDataProps } from "@/interfaces/posts/post-interface";
 import { cache } from "react";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-const delay = () => new Promise((resolve) => setTimeout(resolve, 0));
+const delay = () => new Promise((resolve) => setTimeout(resolve, 500));
 
 export class PostsRepository {
   public fetchPosts = async (): Promise<PostDataProps[]> => {

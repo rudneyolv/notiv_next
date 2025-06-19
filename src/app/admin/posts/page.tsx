@@ -4,23 +4,15 @@ import { Text } from "@/components/Text/Text";
 import { Suspense } from "react";
 import { AdminPostsList } from "../components/AdminPostsList/AdminPostsList";
 import { Heading } from "@/components/Heading/Heading";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Plus, Trash } from "lucide-react";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 export default function AdminPosts() {
   return (
-    <div className="bg-zinc-900 min-h-screen flex flex-col items-center justify-center p-8">
+    <div className="bg-background min-h-screen flex flex-col items-center justify-center p-8">
       <Heading>Notiv Admin</Heading>
 
-      <div className="min-h-screen w-full max-w-3xl p-12 flex flex-col items-center gap-2">
+      <div className="min-h-screen  w-full max-w-3xl p-12 flex flex-col items-center gap-2">
         <div className="flex flex-row justify-between items-center w-full">
           <Text>Posts</Text>
           <Link href="/admin/posts/new">

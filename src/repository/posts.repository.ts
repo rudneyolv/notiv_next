@@ -12,8 +12,33 @@ export class PostsRepository {
       const response = await fetch(`${apiUrl}/posts`, {
         method: "GET",
         next: {
-          revalidate: 10,
-          tags: ["posts"],
+          revalidate: 100,
+          tags: ["new-post"],
+        },
+      });
+      const posts = await response.json();
+
+      await delay();
+
+      return posts;
+    } catch (error: unknown) {
+      console.error(error);
+
+      if (error instanceof Error) {
+        throw error;
+      }
+
+      throw new Error("Erro desconhecido ao buscar os posts");
+    }
+  };
+
+  public fetchAdminPosts = async (): Promise<PostDataProps[]> => {
+    try {
+      const response = await fetch(`${apiUrl}/posts`, {
+        method: "GET",
+        next: {
+          revalidate: 100,
+          tags: ["new-post"],
         },
       });
       const posts = await response.json();

@@ -17,6 +17,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import MDEditor from "@uiw/react-md-editor";
 
+import dynamic from "next/dynamic";
+
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,54 +37,33 @@ import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 import Image from "next/image";
 import { ImageUpload } from "@/components/ImageUpload/ImageUpload";
-
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(5, { message: "O título deve ter no mínimo 5 caracteres." })
-    .max(100, { message: "O título deve ter no máximo 100 caracteres." }),
-
-  summary: z
-    .string()
-    .min(10, { message: "O resumo deve ter no mínimo 10 caracteres." })
-    .max(300, { message: "O resumo deve ter no máximo 300 caracteres." }),
-
-  author_name: z
-    .string()
-    .min(2, { message: "Nome do autor muito curto." })
-    .max(50, { message: "Nome do autor muito longo." }),
-
-  author_last_name: z
-    .string()
-    .min(2, { message: "Sobrenome do autor muito curto." })
-    .max(50, { message: "Sobrenome do autor muito longo." }),
-
-  content: z
-    .string()
-    .min(30, { message: "O conteúdo deve ter pelo menos 30 caracteres." })
-    .max(20_000, { message: "O conteúdo é muito longo." }),
-
-  post_image: z.any(),
-});
+import { MarkdownEditor } from "@/components/MarkdownEditor/MarkdownEditor";
+import { ClientMarkdownEditor } from "@/components/MarkdownEditor/ClientMarkdownEditor";
+import { useCreateNewPost } from "@/hooks/api/requests/admin/use-admin-requests";
+import { NewPostSchema } from "@/schemas/admin/posts/new-post-schema";
 
 export default function AdminPosts() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof NewPostSchema>>({
+    resolver: zodResolver(NewPostSchema),
     mode: "onTouched",
     defaultValues: {
       title: "",
       author_name: "",
       author_last_name: "",
       summary: "",
-      post_image: "",
+      image: undefined,
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-  };
+  const { mutate: createPost } = useCreateNewPost();
 
-  console.log(form.watch());
+  const onSubmit = (values: z.infer<typeof NewPostSchema>) => {
+    createPost(values, {
+      onSuccess: () => {
+        form.reset();
+      },
+    });
+  };
 
   return (
     <div className="bg-zinc-950 min-h-screen flex flex-col items-center justify-center p-8">
@@ -156,19 +137,11 @@ export default function AdminPosts() {
               <FormItem className="w-full">
                 <FormLabel>Contéudo do post</FormLabel>
                 <FormControl>
-                  <MDEditor
-                    className="whitespace-pre-wrap font-sofia"
-                    preview="edit"
+                  <ClientMarkdownEditor
                     onChange={field.onChange}
                     value={field.value}
                     onBlur={field.onBlur}
                     height={400}
-                    previewOptions={{
-                      rehypePlugins: [[rehypeSanitize]],
-                      remarkPlugins: [[remarkGfm]],
-                    }}
-                    extraCommands={[]}
-                    hideToolbar={false}
                   />
                 </FormControl>
                 <FormMessage />
@@ -178,20 +151,17 @@ export default function AdminPosts() {
 
           <FormField
             control={form.control}
-            name="post_image"
-            render={({ field }) => (
+            name="image"
+            render={() => (
               <FormItem className="w-full">
                 <FormLabel>Imagem</FormLabel>
                 <FormControl>
-                  {/* TODO: adicionar lógica para remoção de imagem e melhorar error handling*/}
                   <ImageUpload
                     maxSizeInKb={1024}
                     onAddImage={(data) =>
-                      form.setValue("post_image", data.file, { shouldValidate: false })
+                      form.setValue("image", data.file, { shouldValidate: false })
                     }
-                    onRemoveImage={() =>
-                      form.setValue("post_image", null, { shouldValidate: false })
-                    }
+                    onRemoveImage={() => form.setValue("image", null, { shouldValidate: false })}
                   />
                 </FormControl>
                 <FormMessage />

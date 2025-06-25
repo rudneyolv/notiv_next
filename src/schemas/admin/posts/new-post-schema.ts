@@ -28,7 +28,7 @@ export const NewPostSchema = z.object({
     .min(30, { message: "O conteúdo deve ter pelo menos 30 caracteres." })
     .max(20_000, { message: "O conteúdo é muito longo." }),
 
-  image: z.instanceof(File),
+  image: z.instanceof(File).nullable(),
 });
 
 export type NewPostData = z.infer<typeof NewPostSchema>;

@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Text } from "../Text/Text";
 import { Button } from "../ui/button";
 import {
@@ -23,37 +23,41 @@ enum UploadStatus {
 
 interface ImageUploadState {
   status?: UploadStatus;
-  file?: File | null;
   previewUrl?: string | null;
   message?: string;
 }
 
 interface ImageUploadProps {
-  onAddImage?: (data: { previewUrl: string; file: File }) => void;
-  onRemoveImage?: () => void;
+  onChange: (file: File | null) => void;
   maxSizeInKb?: number;
+  value: File | null;
 }
 
-export function ImageUpload({ onAddImage, onRemoveImage, maxSizeInKb = 900 }: ImageUploadProps) {
+const getMessages = (maxSizeInKb: number) => ({
+  Idle: `Envie a imagem do seu post (Max: ${maxSizeInKb} KB)`,
+  Error: {
+    MaxSizeExceed: `A imagem enviada ultrapassa o limite de ${maxSizeInKb} KB.`,
+    InvalidType: "Tipo de arquivo inválido. Por favor, envie uma imagem",
+  },
+});
+
+export function ImageUpload({ onChange, value, maxSizeInKb = 900 }: ImageUploadProps) {
+  // maxSizeInKb transformado em bytes
   const IMAGE_UPLOAD_MAX_SIZE = maxSizeInKb * 1024;
 
-  const Messages = {
-    Idle: `Envie a imagem do seu post (Max: ${maxSizeInKb} KB)`,
-    Error: {
-      MaxSizeExceed: `A imagem enviada ultrapassa o limite de ${maxSizeInKb} KB.`,
-      InvalidType: "Tipo de arquivo inválido. Por favor, envie uma imagem",
-    },
-  };
+  // Refs utilizados no componente
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const previousUrlRef = useRef<string | null>(null);
+
+  // Mensagens utilizadas no status do imageState
+  const Messages = useMemo(() => getMessages(maxSizeInKb), [maxSizeInKb]);
 
   // Estado geral do upload
   const [imageState, setImageState] = useState<ImageUploadState>({
     status: UploadStatus.Idle,
     message: Messages.Idle,
-    file: null,
     previewUrl: null,
   });
-
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Atualiza status do upload
   const updateStatus = useCallback((status: UploadStatus) => {
@@ -71,37 +75,20 @@ export function ImageUpload({ onAddImage, onRemoveImage, maxSizeInKb = 900 }: Im
       if (!file.type.startsWith("image/")) {
         updateStatus(UploadStatus.Error);
         updateMessage(Messages.Error.InvalidType);
+        onChange(null);
         return;
       }
 
       if (file.size > IMAGE_UPLOAD_MAX_SIZE) {
         updateStatus(UploadStatus.Error);
         updateMessage(Messages.Error.MaxSizeExceed);
+        onChange(null);
         return;
       }
 
-      if (imageState.previewUrl) {
-        URL.revokeObjectURL(imageState.previewUrl);
-      }
-
-      const previewUrl = URL.createObjectURL(file);
-      setImageState({
-        status: UploadStatus.Ready,
-        file,
-        previewUrl,
-        message: file.name,
-      });
-
-      onAddImage?.({ previewUrl, file });
+      onChange(file);
     },
-    [
-      imageState.previewUrl,
-      onAddImage,
-      updateStatus,
-      updateMessage,
-      IMAGE_UPLOAD_MAX_SIZE,
-      Messages.Error,
-    ]
+    [onChange, updateStatus, updateMessage, IMAGE_UPLOAD_MAX_SIZE, Messages.Error]
   );
 
   // Dispara o seletor de arquivos
@@ -114,6 +101,9 @@ export function ImageUpload({ onAddImage, onRemoveImage, maxSizeInKb = 900 }: Im
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (file) processFile(file);
+      if (e.target) {
+        e.target.value = "";
+      }
     },
     [processFile]
   );
@@ -130,39 +120,48 @@ export function ImageUpload({ onAddImage, onRemoveImage, maxSizeInKb = 900 }: Im
 
   // Remove imagem atual
   const handleRemoveImage = useCallback(() => {
-    if (imageState.previewUrl) {
-      URL.revokeObjectURL(imageState.previewUrl);
+    onChange(null);
+  }, [onChange]);
+
+  // Atualiza o estado do componente com base no value recebido
+  useEffect(() => {
+    if (previousUrlRef.current) {
+      URL.revokeObjectURL(previousUrlRef.current);
     }
 
-    setImageState({
-      status: UploadStatus.Idle,
-      file: null,
-      previewUrl: null,
-      message: Messages.Idle,
-    });
+    if (value) {
+      const previewUrl = URL.createObjectURL(value);
+      previousUrlRef.current = previewUrl;
 
-    onRemoveImage?.();
-  }, [imageState.previewUrl, onRemoveImage, Messages.Idle]);
-
-  // Cleanup das URLs criadas para evitar memory leak
-  useEffect(() => {
-    const previousUrl = imageState.previewUrl;
+      setImageState({
+        status: UploadStatus.Ready,
+        previewUrl: previewUrl,
+        message: value.name,
+      });
+    } else {
+      setImageState({
+        status: UploadStatus.Idle,
+        previewUrl: null,
+        message: Messages.Idle,
+      });
+    }
 
     return () => {
-      if (previousUrl) {
-        URL.revokeObjectURL(previousUrl);
+      if (previousUrlRef.current) {
+        URL.revokeObjectURL(previousUrlRef.current);
+        previousUrlRef.current = null;
       }
     };
-  }, [imageState.previewUrl]);
+  }, [value, Messages]);
 
   return (
     // Container principal do dropzone com handlers de drag & drop e status visual
     <div
       onDrop={handleAddImage}
       onDragOver={(e) => e.preventDefault()} // Necessário pra permitir drop
-      onDragEnter={() => updateStatus(imageState.file ? UploadStatus.Ready : UploadStatus.Hover)}
+      onDragEnter={() => updateStatus(value ? UploadStatus.Ready : UploadStatus.Hover)}
       onDragLeave={() => {
-        if (imageState.file) {
+        if (value) {
           updateStatus(UploadStatus.Ready);
         } else {
           updateStatus(UploadStatus.Idle);
@@ -189,7 +188,7 @@ export function ImageUpload({ onAddImage, onRemoveImage, maxSizeInKb = 900 }: Im
           <>
             <Image
               src={imageState.previewUrl}
-              alt={imageState.file?.name ?? "Imagem enviada"}
+              alt={value?.name ?? "Imagem enviada"}
               width={200}
               height={100}
               className={PreviewImage()}
@@ -199,6 +198,7 @@ export function ImageUpload({ onAddImage, onRemoveImage, maxSizeInKb = 900 }: Im
               className={CloseButton()}
               aria-label="Remover imagem"
               onClick={handleRemoveImage}
+              type="button"
             >
               <X />
             </button>

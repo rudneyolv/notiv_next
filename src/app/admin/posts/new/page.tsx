@@ -51,7 +51,7 @@ export default function AdminPosts() {
       author_name: "",
       author_last_name: "",
       summary: "",
-      image: undefined,
+      image: null,
     },
   });
 
@@ -64,6 +64,8 @@ export default function AdminPosts() {
       },
     });
   };
+
+  console.log(form.watch());
 
   return (
     <div className="bg-zinc-950 min-h-screen flex flex-col items-center justify-center p-8">
@@ -152,16 +154,14 @@ export default function AdminPosts() {
           <FormField
             control={form.control}
             name="image"
-            render={() => (
+            render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Imagem</FormLabel>
                 <FormControl>
                   <ImageUpload
                     maxSizeInKb={1024}
-                    onAddImage={(data) =>
-                      form.setValue("image", data.file, { shouldValidate: false })
-                    }
-                    onRemoveImage={() => form.setValue("image", null, { shouldValidate: false })}
+                    onChange={(data) => form.setValue("image", data, { shouldValidate: false })}
+                    value={field.value}
                   />
                 </FormControl>
                 <FormMessage />

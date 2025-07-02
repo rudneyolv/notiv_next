@@ -83,9 +83,8 @@ export class AdminPostsRepository {
         }),
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-        published: true,
-        image_url: "/images/bryen_0.png",
         ...data,
+        image: "/images/bryen_0.png", //TODO: leia o topo do arquivo
       }),
       headers: {
         "Content-Type": "application/json",

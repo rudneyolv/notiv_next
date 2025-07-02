@@ -6,11 +6,11 @@
       "author_name": "post publico 2",
       "author_last_name": "post publico 2",
       "content": "post publicopost publicopost publicopost publicopost publico 1",
-      "image": {},
+      "image": "/images/bryen_0.png",
+      "published": false,
       "slug": "post-publico",
       "created_at": "2025-06-30T22:26:53.006Z",
-      "updated_at": "2025-07-02T22:20:33.100Z",
-      "published": true,
+      "updated_at": "2025-07-02T22:50:05.399Z",
       "id": "fe49"
     },
     {
@@ -19,12 +19,26 @@
       "author_name": "Rudney",
       "author_last_name": "Bueno",
       "content": "Novo postNovo postNovo postNovo postNovo post",
+      "image": "/images/bryen_0.png",
+      "published": false,
       "slug": "novo-post",
       "created_at": "2025-07-01T00:12:38.211Z",
-      "updated_at": "2025-07-01T23:07:04.059Z",
-      "published": true,
-      "id": "e178",
-      "image": "/images/bryen_0.png"
+      "updated_at": "2025-07-02T22:49:59.473Z",
+      "id": "e178"
+    },
+    {
+      "id": "dff9",
+      "slug": "titulo-do-post",
+      "created_at": "2025-07-02T22:43:47.961Z",
+      "updated_at": "2025-07-02T22:43:47.961Z",
+      "published": false,
+      "image_url": "/images/bryen_0.png",
+      "title": "Titulo do post",
+      "summary": "Resumão daora do post",
+      "author_name": "Rudney",
+      "author_last_name": "Oliveira",
+      "content": "Ahhh um texto aqui né sobre o post e tal",
+      "image": {}
     }
   ]
 }

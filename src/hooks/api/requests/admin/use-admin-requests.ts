@@ -33,7 +33,7 @@ export const useCreateNewPost = (): UseMutationResult<
 export const useEditPost = () => {
   return useMutation({
     mutationFn: adminPostsInstance.editPost,
-    onSuccess: (variables) => {
+    onSuccess: (data, variables) => {
       revalidateCustomTag(`post-${variables.id}`);
       revalidateCustomTag("edit-post");
     },

@@ -23,7 +23,7 @@ import { ImageUpload } from "@/components/ImageUpload/ImageUpload";
 import { ClientMarkdownEditor } from "@/components/MarkdownEditor/ClientMarkdownEditor";
 import { FormPostData, PostSchema } from "@/schemas/admin/posts/new-post-schema";
 import { PostFormContainerStyles, PostFormStyles } from "./PostForm-Styles";
-import { PostDataProps } from "@/interfaces/posts/post-interface";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface PostFormProps {
   postData?: FormPostData;
@@ -42,6 +42,7 @@ export default function PostForm({ postData, onSubmit, isPending, error }: PostF
       author_last_name: "",
       summary: "",
       image: null,
+      published: true,
     },
   });
 
@@ -148,11 +149,26 @@ export default function PostForm({ postData, onSubmit, isPending, error }: PostF
                 <FormControl>
                   <ImageUpload
                     maxSizeInKb={1024}
-                    onChange={(data) => form.setValue("image", data, { shouldValidate: false })}
+                    onChange={(data) => form.setValue("image", data, { shouldValidate: true })}
                     value={field.value}
                     disabled={isPending}
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="published"
+            render={({ field }) => (
+              <FormItem className="w-full flex">
+                <FormControl>
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+                <FormLabel>Publicar o post</FormLabel>
+
                 <FormMessage />
               </FormItem>
             )}

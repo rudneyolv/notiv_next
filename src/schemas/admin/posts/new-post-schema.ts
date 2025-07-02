@@ -28,12 +28,12 @@ export const PostSchema = z.object({
     .min(30, { message: "O conteúdo deve ter pelo menos 30 caracteres." })
     .max(20_000, { message: "O conteúdo é muito longo." }),
 
-  image: z.instanceof(File).nullable(),
+  image: z.union([z.instanceof(File), z.string()]).nullable(),
+
+  published: z.boolean(),
 });
 
-export interface FormPostData extends z.infer<typeof PostSchema> {
-  image_url?: string;
-}
+export type FormPostData = z.infer<typeof PostSchema>;
 
 export interface EditPostProps {
   postId: number | string;

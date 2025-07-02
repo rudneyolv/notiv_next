@@ -2,20 +2,17 @@
 
 import { Text } from "@/components/Text/Text";
 import { PostDataProps } from "@/interfaces/posts/post-interface";
-import { PostsRepository } from "@/repository/posts.repository";
 import { isError } from "@/utils/errors";
 import { AdminPostsTable } from "../AdminPostsTable/AdminPostsTable";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import Link from "next/link";
+import { AdminPostsRepository } from "@/repository/admin-posts-repository";
 
-const postsRepositoryInstance = new PostsRepository();
+const adminPostsRepositoryInstance = new AdminPostsRepository();
 
 export const AdminPostsList = async () => {
   let posts: PostDataProps[] = [];
 
   try {
-    posts = await postsRepositoryInstance.fetchAdminPosts();
+    posts = await adminPostsRepositoryInstance.fetchAdminPosts();
   } catch (error) {
     const errorMessage = isError(error) ? error.message : "Erro ao buscar posts";
     return <Text>{errorMessage}</Text>;

@@ -13,7 +13,7 @@ export const PostsList = async () => {
   let posts: PostDataProps[] = [];
 
   try {
-    posts = await postsRepositoryInstance.fetchPosts();
+    posts = await postsRepositoryInstance.cachedFetchPosts();
   } catch (error) {
     const errorMessage = isError(error) ? error.message : "Erro ao buscar posts";
     return <Text>{errorMessage}</Text>;

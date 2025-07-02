@@ -18,7 +18,7 @@ export default async function PostDetails({ slug }: PostDetailsProps) {
   let post: PostDataProps;
 
   try {
-    post = await postsRepositoryInstance.fetchBySlug(slug);
+    post = await postsRepositoryInstance.cachedFetchBySlug(slug);
   } catch (error: unknown) {
     const errorMessage = isError(error) ? error.message : "Erro desconhecido ao buscar o post";
     return <Text>{errorMessage}</Text>;

@@ -32,6 +32,7 @@ export const PreviewContainer = cva(
 
     transition-translate duration-500 will-change-transform
     hover:-translate-y-1
+    data-[status=disabled]:translate-y-0
   `
 );
 

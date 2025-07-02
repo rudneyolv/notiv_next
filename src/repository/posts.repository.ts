@@ -1,13 +1,12 @@
 /** @format */
 
 import { PostDataProps } from "@/interfaces/posts/post-interface";
-import { cache } from "react";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 const delay = () => new Promise((resolve) => setTimeout(resolve, 500));
 
 export class PostsRepository {
-  public fetchPosts = async (): Promise<PostDataProps[]> => {
+  public cachedFetchPosts = async (): Promise<PostDataProps[]> => {
     try {
       const response = await fetch(`${apiUrl}/posts`, {
         method: "GET",
@@ -32,32 +31,7 @@ export class PostsRepository {
     }
   };
 
-  public fetchAdminPosts = async (): Promise<PostDataProps[]> => {
-    try {
-      const response = await fetch(`${apiUrl}/posts`, {
-        method: "GET",
-        next: {
-          revalidate: 100,
-          tags: ["new-post"],
-        },
-      });
-      const posts = await response.json();
-
-      await delay();
-
-      return posts;
-    } catch (error: unknown) {
-      console.error(error);
-
-      if (error instanceof Error) {
-        throw error;
-      }
-
-      throw new Error("Erro desconhecido ao buscar os posts");
-    }
-  };
-
-  public fetchBySlug = cache(async (slug: string): Promise<PostDataProps> => {
+  public cachedFetchBySlug = async (slug: string): Promise<PostDataProps> => {
     try {
       const response = await fetch(`${apiUrl}/posts?slug=${slug}`, {
         method: "GET",
@@ -81,5 +55,5 @@ export class PostsRepository {
 
       throw new Error("Erro desconhecido ao buscar o post");
     }
-  });
+  };
 }

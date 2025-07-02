@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 
-export const NewPostSchema = z.object({
+export const PostSchema = z.object({
   title: z
     .string()
     .min(5, { message: "O título deve ter no mínimo 5 caracteres." })
@@ -31,4 +31,10 @@ export const NewPostSchema = z.object({
   image: z.instanceof(File).nullable(),
 });
 
-export type NewPostData = z.infer<typeof NewPostSchema>;
+export interface FormPostData extends z.infer<typeof PostSchema> {
+  image_url?: string;
+}
+
+export interface EditPostProps {
+  postId: number | string;
+}

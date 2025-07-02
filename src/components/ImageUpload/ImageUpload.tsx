@@ -30,7 +30,8 @@ interface ImageUploadState {
 interface ImageUploadProps {
   onChange: (file: File | null) => void;
   maxSizeInKb?: number;
-  value: File | null;
+  value: File | string | null;
+  disabled?: boolean;
 }
 
 const getMessages = (maxSizeInKb: number) => ({
@@ -41,7 +42,8 @@ const getMessages = (maxSizeInKb: number) => ({
   },
 });
 
-export function ImageUpload({ onChange, value, maxSizeInKb = 900 }: ImageUploadProps) {
+//TODO: Implementar sistema de disabled
+export function ImageUpload({ onChange, value, maxSizeInKb = 900, disabled }: ImageUploadProps) {
   // maxSizeInKb transformado em bytes
   const IMAGE_UPLOAD_MAX_SIZE = maxSizeInKb * 1024;
 
@@ -93,35 +95,43 @@ export function ImageUpload({ onChange, value, maxSizeInKb = 900 }: ImageUploadP
 
   // Dispara o seletor de arquivos
   const handleClick = useCallback(() => {
+    if (disabled) return;
+
     fileInputRef.current?.click();
-  }, []);
+  }, [disabled]);
 
   // Lida com mudança do input file
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (disabled) return;
+
       const file = e.target.files?.[0];
       if (file) processFile(file);
       if (e.target) {
         e.target.value = "";
       }
     },
-    [processFile]
+    [processFile, disabled]
   );
 
   // Lida com drop de arquivo via drag and drop
   const handleAddImage = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
+      if (disabled) return;
+
       const file = e.dataTransfer.files[0];
       if (file) processFile(file);
     },
-    [processFile]
+    [processFile, disabled]
   );
 
   // Remove imagem atual
   const handleRemoveImage = useCallback(() => {
+    if (disabled) return;
+
     onChange(null);
-  }, [onChange]);
+  }, [onChange, disabled]);
 
   // Atualiza o estado do componente com base no value recebido
   useEffect(() => {
@@ -129,7 +139,23 @@ export function ImageUpload({ onChange, value, maxSizeInKb = 900 }: ImageUploadP
       URL.revokeObjectURL(previousUrlRef.current);
     }
 
-    if (value) {
+    if (value === null) {
+      setImageState({
+        status: UploadStatus.Idle,
+        previewUrl: null,
+        message: Messages.Idle,
+      });
+    }
+
+    if (typeof value === "string" && value.trim()) {
+      setImageState({
+        status: UploadStatus.Ready,
+        previewUrl: value,
+        message: value,
+      });
+    }
+
+    if (value instanceof File) {
       const previewUrl = URL.createObjectURL(value);
       previousUrlRef.current = previewUrl;
 
@@ -137,12 +163,6 @@ export function ImageUpload({ onChange, value, maxSizeInKb = 900 }: ImageUploadP
         status: UploadStatus.Ready,
         previewUrl: previewUrl,
         message: value.name,
-      });
-    } else {
-      setImageState({
-        status: UploadStatus.Idle,
-        previewUrl: null,
-        message: Messages.Idle,
       });
     }
 
@@ -159,15 +179,20 @@ export function ImageUpload({ onChange, value, maxSizeInKb = 900 }: ImageUploadP
     <div
       onDrop={handleAddImage}
       onDragOver={(e) => e.preventDefault()} // Necessário pra permitir drop
-      onDragEnter={() => updateStatus(value ? UploadStatus.Ready : UploadStatus.Hover)}
+      onDragEnter={() => {
+        if (disabled) return;
+        updateStatus(value ? UploadStatus.Ready : UploadStatus.Hover);
+      }}
       onDragLeave={() => {
+        if (disabled) return;
+
         if (value) {
           updateStatus(UploadStatus.Ready);
         } else {
           updateStatus(UploadStatus.Idle);
         }
       }}
-      data-status={imageState.status}
+      data-status={disabled ? "disabled" : imageState.status}
       className={ImageUploadStyles()}
     >
       {/* Input file escondido que abre seletor ao clicar no botão */}
@@ -179,10 +204,11 @@ export function ImageUpload({ onChange, value, maxSizeInKb = 900 }: ImageUploadP
         aria-label="Adicionar imagem"
         ref={fileInputRef}
         onChange={handleInputChange}
+        disabled={disabled}
       />
 
       {/* Container de preview */}
-      <div className={PreviewContainer()}>
+      <div data-status={disabled ? "disabled" : imageState.status} className={PreviewContainer()}>
         {/* Preview da imagem + botão de remover */}
         {imageState.previewUrl && (
           <>
@@ -199,6 +225,7 @@ export function ImageUpload({ onChange, value, maxSizeInKb = 900 }: ImageUploadP
               aria-label="Remover imagem"
               onClick={handleRemoveImage}
               type="button"
+              disabled={disabled}
             >
               <X />
             </button>
@@ -212,7 +239,7 @@ export function ImageUpload({ onChange, value, maxSizeInKb = 900 }: ImageUploadP
 
         {/* Botão para adicionar imagem, mostrado só se não há preview */}
         {!imageState.previewUrl && (
-          <Button type="button" variant="outline" onClick={handleClick}>
+          <Button disabled={disabled} type="button" variant="outline" onClick={handleClick}>
             Adicionar Imagem
           </Button>
         )}

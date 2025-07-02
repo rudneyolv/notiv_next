@@ -5,14 +5,16 @@ import MDEditor, { MDEditorProps } from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 
-type MarkdownEditorProps = MDEditorProps;
+interface MarkdownEditorProps extends MDEditorProps {
+  disabled?: boolean;
+}
 
 // Importar diretamente pode causar erros de hidratação
-export function MarkdownEditor({ ...props }: MarkdownEditorProps) {
+export function MarkdownEditor({ disabled, ...props }: MarkdownEditorProps) {
   return (
     <MDEditor
       className="whitespace-pre-wrap font-sofia"
-      preview="edit"
+      preview={disabled ? "preview" : "edit"}
       hideToolbar={false}
       previewOptions={{
         rehypePlugins: [[rehypeSanitize]],

@@ -6,6 +6,7 @@ import { Sofia_Sans } from "next/font/google";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
 import { CustomQueryClientProvider } from "@/providers/query-client-provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: {
@@ -32,6 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`antialiased dark ${sofiaSans.className}`}>
         <Header />
+        <Toaster position="bottom-center" />
         <CustomQueryClientProvider>{children}</CustomQueryClientProvider>
         <Footer />
       </body>

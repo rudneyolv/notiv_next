@@ -2,11 +2,11 @@
 
 import { Text } from "@/components/Text/Text";
 import { Suspense } from "react";
-import { AdminPostsList } from "../components/AdminPostsList/AdminPostsList";
 import { Heading } from "@/components/Heading/Heading";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { AdminPostsList } from "@/components/PageComponents/admin/AdminPostsList/AdminPostsList";
 export default function AdminPosts() {
   return (
     <div className="bg-background min-h-screen flex flex-col items-center justify-center p-8">

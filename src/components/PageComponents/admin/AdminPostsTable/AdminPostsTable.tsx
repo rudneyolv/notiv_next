@@ -98,7 +98,7 @@ export function AdminPostsTable({ posts }: { posts: PostDataProps[] }) {
         const post = row.original;
 
         return (
-          <Link href={`/admin/post/${post.slug}/edit`}>
+          <Link href={`/admin/posts/edit/${post.slug}`}>
             <Button
               className="duration-300 hover:text-purple-500 transition-colors"
               variant="ghost"

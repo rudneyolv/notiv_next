@@ -6,13 +6,14 @@ export interface PostDataProps {
   id: string;
   title: string;
   slug: string;
-  excerpt: string;
+  summary: string;
   content: string;
-  coverImageUrl: string;
+  image_url: string;
   published: boolean;
-  createdAt: string;
-  updatedAt: string;
-  author: string;
+  created_at: string;
+  updated_at: string;
+  author_name: string;
+  author_last_name: string;
 }
 
 export interface PostImageProps {

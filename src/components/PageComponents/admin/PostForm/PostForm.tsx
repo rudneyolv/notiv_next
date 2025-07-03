@@ -164,10 +164,13 @@ export default function PostForm({ postData, onSubmit, isPending, error }: PostF
             render={({ field }) => (
               <FormItem className="w-full flex">
                 <FormControl>
-                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                  <Checkbox
+                    disabled={isPending}
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
                 </FormControl>
                 <FormLabel>Publicar o post</FormLabel>
-
                 <FormMessage />
               </FormItem>
             )}

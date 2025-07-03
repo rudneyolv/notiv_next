@@ -6,6 +6,7 @@ import { FormPostData } from "@/schemas/admin/posts/new-post-schema";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PostForm from "@/components/PageComponents/admin/PostForm/PostForm";
+import { isError } from "@/utils/errors";
 
 export default function NewPost() {
   const { mutate: createPost, isPending, error } = useCreateNewPost();
@@ -18,8 +19,8 @@ export default function NewPost() {
         router.push("/admin/posts");
       },
 
-      onError: () => {
-        toast.error("Erro ao criar post");
+      onError: (error: unknown) => {
+        toast.error(isError(error) ? error.message : "Erro ao criar post");
       },
     });
   };

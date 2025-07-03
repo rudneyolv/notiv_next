@@ -50,7 +50,6 @@ export default function PostForm({ postData, onSubmit, isPending, error }: PostF
     <div className={PostFormContainerStyles()}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className={PostFormStyles()}>
-          <pre>{JSON.stringify(form.watch(), null, 2)}</pre>
           <FormField
             control={form.control}
             name="title"

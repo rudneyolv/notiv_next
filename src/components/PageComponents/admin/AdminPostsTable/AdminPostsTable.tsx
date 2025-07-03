@@ -2,6 +2,7 @@
 
 "use client";
 
+import { Text } from "@/components/Text/Text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,29 +20,39 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useDeletePost } from "@/hooks/api/requests/admin/use-admin-requests";
 /** @format */
 
 import { PostDataProps } from "@/interfaces/posts/post-interface";
+import { isError } from "@/utils/errors";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Check, Pen, Trash, X } from "lucide-react";
+import { Check, Loader2, Pen, Trash, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function AdminPostsTable({ posts }: { posts: PostDataProps[] }) {
   const [postToDelete, setPostToDelete] = useState<PostDataProps | null>(null);
+  const { mutate: deletePost, isPending: isPendingDeletePost } = useDeletePost();
 
   // Função para lidar com a deleção
   const handleDeletePost = async () => {
     if (!postToDelete) return;
-    console.log("Deletando de verdade o post:", postToDelete.id);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    deletePost(postToDelete.id, {
+      onSuccess: () => {
+        toast.success("Post deletado com sucesso");
+        setPostToDelete(null);
+      },
 
-    setPostToDelete(null);
+      onError: (error: unknown) => {
+        toast.error(isError(error) ? error.message : "Erro ao excluir post");
+      },
+    });
   };
 
   const columnHelper = createColumnHelper<PostDataProps>();
@@ -56,8 +67,13 @@ export function AdminPostsTable({ posts }: { posts: PostDataProps[] }) {
       ),
     }),
 
-    columnHelper.accessor("author", {
+    columnHelper.accessor("author_name", {
       header: "Autor",
+      cell: (info) => info.getValue(),
+    }),
+
+    columnHelper.accessor("author_last_name", {
+      header: "Sobrenome",
       cell: (info) => info.getValue(),
     }),
 
@@ -161,8 +177,8 @@ export function AdminPostsTable({ posts }: { posts: PostDataProps[] }) {
           <DialogHeader>
             <DialogTitle>Você tem certeza?</DialogTitle>
             <DialogDescription>
-              Você está prestes a deletar a publicação "{postToDelete?.title}". Essa ação não pode
-              ser desfeita.
+              Você está prestes a deletar o post "{postToDelete?.title}". Essa ação não pode ser
+              desfeita.
             </DialogDescription>
           </DialogHeader>
 
@@ -171,12 +187,17 @@ export function AdminPostsTable({ posts }: { posts: PostDataProps[] }) {
               <Button variant="outline">Cancelar</Button>
             </DialogClose>
 
-            <Button
-              variant="destructive" // Variante 'destructive' é semanticamente melhor para exclusão
-              onClick={handleDeletePost}
-            >
-              Sim, excluir
-            </Button>
+            {isPendingDeletePost && (
+              <Button variant="destructive" onClick={handleDeletePost}>
+                <Loader2 className="animate-spin" /> Carregando
+              </Button>
+            )}
+
+            {!isPendingDeletePost && (
+              <Button variant="destructive" onClick={handleDeletePost}>
+                Sim, excluir
+              </Button>
+            )}
           </div>
         </DialogContent>
       </Dialog>

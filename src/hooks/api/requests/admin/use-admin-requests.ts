@@ -39,3 +39,13 @@ export const useEditPost = () => {
     },
   });
 };
+
+export const useDeletePost = () => {
+  return useMutation({
+    mutationFn: adminPostsInstance.deletePost,
+    onSuccess: (data, variables) => {
+      revalidateCustomTag("delete-post");
+      revalidateCustomTag(`post-${variables}`);
+    },
+  });
+};

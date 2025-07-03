@@ -24,7 +24,7 @@ import { cache } from "react";
 import slugify from "slugify";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-const delay = () => new Promise((resolve) => setTimeout(resolve, 500));
+const delay = () => new Promise((resolve) => setTimeout(resolve, 300));
 
 export class AdminPostsRepository {
   public fetchAdminPosts = async (): Promise<PostDataProps[]> => {
@@ -33,7 +33,7 @@ export class AdminPostsRepository {
         method: "GET",
         next: {
           revalidate: 100,
-          tags: ["new-post", "edit-post"],
+          tags: ["new-post", "edit-post", "delete-post"],
         },
       });
       const posts = await response.json();
@@ -114,12 +114,29 @@ export class AdminPostsRepository {
       },
     });
 
+    const responseData = await response.json();
+
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || "Erro desconhecido");
+      throw new Error(responseData.message || "Erro desconhecido");
     }
 
-    const responseData = await response.json();
     return responseData;
+  };
+
+  public deletePost = async (postid: string | number) => {
+    const response = await fetch(`${apiUrl}/posts/${postid}`, {
+      method: "DELETE",
+    });
+
+    await delay();
+    throw new Error("Erro vindo da requisição");
+
+    // const responseData = await response.json();
+
+    // if (!response.ok) {
+    //   throw new Error(responseData.message || "Erro desconhecido");
+    // }
+
+    // return responseData;
   };
 }

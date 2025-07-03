@@ -5,6 +5,7 @@ import { PostDataProps } from "@/interfaces/posts/post-interface";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 const delay = () => new Promise((resolve) => setTimeout(resolve, 500));
 
+//TODO: refatorar funções para padronizar com o repo admin
 export class PostsRepository {
   public cachedFetchPosts = async (): Promise<PostDataProps[]> => {
     try {
@@ -12,7 +13,7 @@ export class PostsRepository {
         method: "GET",
         next: {
           revalidate: 100,
-          tags: ["new-post"],
+          tags: ["new-post", "edit-post", "delete-post"],
         },
       });
       const posts = await response.json();

@@ -6,6 +6,7 @@ import { Text } from "@/components/Text/Text";
 import { Button } from "@/components/ui/button";
 import { useEditPost, useFetchPostBySlug } from "@/hooks/api/requests/admin/use-admin-requests";
 import { FormPostData } from "@/schemas/admin/posts/new-post-schema";
+import { isError } from "@/utils/errors";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -39,9 +40,8 @@ export default function EditPost({ slug }: { slug: string }) {
         router.push("/admin/posts");
       },
 
-      onError: (error) => {
-        console.log("Error só que no mutate", error);
-        toast.error("Erro ao editar post");
+      onError: (error: unknown) => {
+        toast.error(isError(error) ? error.message : "Erro ao editar post");
       },
     });
   };

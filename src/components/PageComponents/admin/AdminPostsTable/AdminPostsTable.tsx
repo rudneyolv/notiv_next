@@ -2,7 +2,6 @@
 
 "use client";
 
-import { Text } from "@/components/Text/Text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -177,8 +176,8 @@ export function AdminPostsTable({ posts }: { posts: PostDataProps[] }) {
           <DialogHeader>
             <DialogTitle>Você tem certeza?</DialogTitle>
             <DialogDescription>
-              Você está prestes a deletar o post "{postToDelete?.title}". Essa ação não pode ser
-              desfeita.
+              {`Você está prestes a deletar o post "${postToDelete?.title}". Essa ação não pode ser
+              desfeita.`}
             </DialogDescription>
           </DialogHeader>
 

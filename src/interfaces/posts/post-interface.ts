@@ -8,7 +8,7 @@ export interface PostDataProps {
   slug: string;
   summary: string;
   content: string;
-  image: File | null;
+  image: File | string | null;
   published: boolean;
   created_at: string;
   updated_at: string;

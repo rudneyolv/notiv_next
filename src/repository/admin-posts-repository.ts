@@ -31,6 +31,7 @@ export class AdminPostsRepository {
     try {
       const response = await fetch(`${apiUrl}/posts`, {
         method: "GET",
+        cache: "force-cache",
         next: {
           revalidate: 100,
           tags: ["new-post", "edit-post", "delete-post"],
@@ -129,14 +130,13 @@ export class AdminPostsRepository {
     });
 
     await delay();
-    throw new Error("Erro vindo da requisição");
 
-    // const responseData = await response.json();
+    const responseData = await response.json();
 
-    // if (!response.ok) {
-    //   throw new Error(responseData.message || "Erro desconhecido");
-    // }
+    if (!response.ok) {
+      throw new Error(responseData.message || "Erro desconhecido");
+    }
 
-    // return responseData;
+    return responseData;
   };
 }

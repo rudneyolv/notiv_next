@@ -27,13 +27,13 @@ export const PostsList = async () => {
     <div className="grid md:grid-cols-2">
       {posts.map((post) => (
         <Post.Root variant="col" key={post.id} href={`/post/${post.slug}`}>
-          <Post.Image src={post.coverImageUrl} alt={post.title} />
+          {typeof post.image === "string" && <Post.Image src={post.image} alt={post.title} />}
           <Post.Content>
-            <Post.Time datetime={post.createdAt} title={formatDatetime(post.createdAt)}>
-              {formatRelativeDateToNow(post.createdAt)}
+            <Post.Time datetime={post.created_at} title={formatDatetime(post.created_at)}>
+              {formatRelativeDateToNow(post.created_at)}
             </Post.Time>
             <Post.Heading>{post.title}</Post.Heading>
-            <Post.Text>{post.excerpt}</Post.Text>
+            <Post.Text>{post.summary}</Post.Text>
           </Post.Content>
         </Post.Root>
       ))}

@@ -214,7 +214,7 @@ export function ImageUpload({ onChange, value, maxSizeInKb = 900, disabled }: Im
           <>
             <Image
               src={imageState.previewUrl}
-              alt={value?.name ?? "Imagem enviada"}
+              alt={value instanceof File ? value.name : value || "Imagem enviada"}
               width={200}
               height={100}
               className={PreviewImage()}

@@ -30,12 +30,12 @@ export default async function PostDetails({ slug }: PostDetailsProps) {
 
   return (
     <Post.Root variant="col" key={post.id}>
-      <Post.Image src={post.coverImageUrl} alt={post.title} />
+      {typeof post.image === "string" && <Post.Image src={post.image} alt={post.title} />}
       <Post.Content>
         <div>
-          <Post.Text>{post.author}</Post.Text>
-          <Post.Time datetime={post.createdAt} title={formatDatetime(post.createdAt)}>
-            {formatRelativeDateToNow(post.createdAt)}
+          <Post.Text>{`${post.author_name} ${post.author_last_name}`}</Post.Text>
+          <Post.Time datetime={post.created_at} title={formatDatetime(post.created_at)}>
+            {formatRelativeDateToNow(post.created_at)}
           </Post.Time>
         </div>
 

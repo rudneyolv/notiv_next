@@ -8,6 +8,7 @@ import { AdminPostsRepository } from "@/repository/admin-posts-repository";
 
 const adminPostsRepositoryInstance = new AdminPostsRepository();
 
+//TODO: Transformar em página client, usar tanstack query e buscar os dados sem cache do next
 export const AdminPostsList = async () => {
   let posts: PostDataProps[] = [];
 

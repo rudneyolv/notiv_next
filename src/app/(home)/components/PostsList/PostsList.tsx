@@ -1,19 +1,17 @@
 /** @format */
 
+import { postsApi } from "@/api/posts/posts-api";
 import { Post } from "@/components/Post";
 import { Text } from "@/components/Text/Text";
 import { PostDataProps } from "@/interfaces/posts/post-interface";
-import { PostsRepository } from "@/repository/posts.repository";
 import { isError } from "@/utils/errors";
 import { formatDatetime, formatRelativeDateToNow } from "@/utils/format-datetime";
-
-const postsRepositoryInstance = new PostsRepository();
 
 export const PostsList = async () => {
   let posts: PostDataProps[] = [];
 
   try {
-    posts = await postsRepositoryInstance.cachedFetchPosts();
+    posts = await postsApi.cachedFetchAll();
   } catch (error) {
     const errorMessage = isError(error) ? error.message : "Erro ao buscar posts";
     return <Text>{errorMessage}</Text>;

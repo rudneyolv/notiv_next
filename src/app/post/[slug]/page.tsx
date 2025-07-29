@@ -9,8 +9,6 @@ interface PostPageParams {
   params: Promise<{ slug: string }>;
 }
 
-// const postsRepositoryInstance = new PostsRepository();
-
 // export async function generateMetadata({ params }: PostPageParams): Promise<Metadata> {
 //   const { slug } = await params;
 //   const post = await postsRepositoryInstance.fetchBySlug(slug);

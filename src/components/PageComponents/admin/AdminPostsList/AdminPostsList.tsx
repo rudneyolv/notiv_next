@@ -4,16 +4,14 @@ import { Text } from "@/components/Text/Text";
 import { PostDataProps } from "@/interfaces/posts/post-interface";
 import { isError } from "@/utils/errors";
 import { AdminPostsTable } from "../AdminPostsTable/AdminPostsTable";
-import { AdminPostsRepository } from "@/repository/admin-posts-repository";
-
-const adminPostsRepositoryInstance = new AdminPostsRepository();
+import { adminPostsApi } from "@/api/admin/posts/posts-api";
 
 //TODO: Transformar em página client, usar tanstack query e buscar os dados sem cache do next
 export const AdminPostsList = async () => {
   let posts: PostDataProps[] = [];
 
   try {
-    posts = await adminPostsRepositoryInstance.fetchAdminPosts();
+    posts = await adminPostsApi.fetchAll();
   } catch (error) {
     const errorMessage = isError(error) ? error.message : "Erro ao buscar posts";
     return <Text>{errorMessage}</Text>;

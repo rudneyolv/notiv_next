@@ -1,14 +1,12 @@
 /** @format */
 
+import { postsApi } from "@/api/posts/posts-api";
 import { Markdown } from "@/components/Markdown/Markdown";
 import { Post } from "@/components/Post";
 import { Text } from "@/components/Text/Text";
 import { PostDataProps } from "@/interfaces/posts/post-interface";
-import { PostsRepository } from "@/repository/posts.repository";
 import { isError } from "@/utils/errors";
 import { formatDatetime, formatRelativeDateToNow } from "@/utils/format-datetime";
-
-const postsRepositoryInstance = new PostsRepository();
 
 interface PostDetailsProps {
   slug: string;
@@ -18,7 +16,7 @@ export default async function PostDetails({ slug }: PostDetailsProps) {
   let post: PostDataProps;
 
   try {
-    post = await postsRepositoryInstance.cachedFetchBySlug(slug);
+    post = await postsApi.cachedFetchBySlug(slug);
   } catch (error: unknown) {
     const errorMessage = isError(error) ? error.message : "Erro desconhecido ao buscar o post";
     return <Text>{errorMessage}</Text>;

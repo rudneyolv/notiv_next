@@ -1,51 +1,55 @@
 /** @format */
-
 import { revalidateCustomTag } from "@/actions/cache.actions";
 import { PostDataProps } from "@/interfaces/posts/post-interface";
-import { AdminPostsRepository } from "@/repository/admin-posts-repository";
 import { FormPostData } from "@/schemas/admin/posts/new-post-schema";
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "@tanstack/react-query";
+import { adminPostsApi } from "@/api/admin/posts/posts-api";
 
-const adminPostsInstance = new AdminPostsRepository();
-
-export const useFetchPostBySlug = (slug: string): UseQueryResult<PostDataProps, Error> => {
-  return useQuery({
-    queryFn: () => adminPostsInstance.fetchBySlug(slug),
-    queryKey: ["post", slug],
-    gcTime: 5000,
-    staleTime: 5000,
-  });
-};
-
-export const useCreateNewPost = (): UseMutationResult<
+const useCreateNewPost = (): UseMutationResult<
   unknown, // resposta da mutation
   Error, // erro
   FormPostData // input
 > => {
   return useMutation({
-    mutationFn: adminPostsInstance.createNewPost,
+    mutationFn: adminPostsApi.create,
     onSuccess: () => {
       revalidateCustomTag("new-post");
     },
   });
 };
 
-export const useEditPost = () => {
+const useEditPost = () => {
   return useMutation({
-    mutationFn: adminPostsInstance.editPost,
-    onSuccess: (data, variables) => {
+    mutationFn: adminPostsApi.edit,
+    onSuccess: (_data, variables) => {
       revalidateCustomTag(`post-${variables.id}`);
       revalidateCustomTag("edit-post");
     },
   });
 };
 
-export const useDeletePost = () => {
+const useDeletePost = () => {
   return useMutation({
-    mutationFn: adminPostsInstance.deletePost,
-    onSuccess: (data, variables) => {
+    mutationFn: adminPostsApi.delete,
+    onSuccess: (_data, variables) => {
       revalidateCustomTag("delete-post");
       revalidateCustomTag(`post-${variables}`);
     },
   });
+};
+
+const useFetchPostBySlug = (slug: string): UseQueryResult<PostDataProps, Error> => {
+  return useQuery({
+    queryFn: () => adminPostsApi.fetchBySlug(slug),
+    queryKey: ["post", slug],
+    gcTime: 5000,
+    staleTime: 5000,
+  });
+};
+
+export const useAdminPosts = {
+  create: useCreateNewPost,
+  delete: useDeletePost,
+  edit: useEditPost,
+  fetchBySlug: useFetchPostBySlug,
 };

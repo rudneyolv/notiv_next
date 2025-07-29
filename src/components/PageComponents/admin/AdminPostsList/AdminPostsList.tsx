@@ -4,7 +4,7 @@ import { Text } from "@/components/Text/Text";
 import { PostDataProps } from "@/interfaces/posts/post-interface";
 import { isError } from "@/utils/errors";
 import { AdminPostsTable } from "../AdminPostsTable/AdminPostsTable";
-import { adminPostsApi } from "@/api/admin/posts/posts-api";
+import { adminPostsApi } from "@/api/admin/posts-api";
 
 //TODO: Transformar em página client, usar tanstack query e buscar os dados sem cache do next
 export const AdminPostsList = async () => {

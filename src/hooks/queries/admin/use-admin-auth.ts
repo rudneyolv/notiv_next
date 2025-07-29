@@ -1,9 +1,9 @@
 /** @format */
 
-import { adminAuthApi } from "@/api/admin/auth/auth-api";
+import { adminAuthApi } from "@/api/admin/auth-api";
 import { useMutation } from "@tanstack/react-query";
 
-export const useAdminLogin = () => {
+const useAdminLogin = () => {
   return useMutation({
     mutationFn: adminAuthApi.login,
   });

@@ -15,7 +15,7 @@ const login = async (data: LoginFormType) => {
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Erro desconhecido");
+    throw new Error(error.message || "Erro desconhecido ao efetuar login");
   }
 };
 

@@ -3,7 +3,7 @@ import { revalidateCustomTag } from "@/actions/cache.actions";
 import { PostDataProps } from "@/interfaces/posts/post-interface";
 import { FormPostData } from "@/schemas/admin/posts/new-post-schema";
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "@tanstack/react-query";
-import { adminPostsApi } from "@/api/admin/posts/posts-api";
+import { adminPostsApi } from "@/api/admin/posts-api";
 
 const useCreateNewPost = (): UseMutationResult<
   unknown, // resposta da mutation

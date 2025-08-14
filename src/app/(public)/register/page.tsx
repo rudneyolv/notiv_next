@@ -1,6 +1,6 @@
 /** @format */
 
-import { RegisterForm } from "@/components/PageComponents/admin/RegisterForm/RegisterForm";
+import { RegisterForm } from "@/components/PageComponents/admin/register-form/register-form";
 
 export default function RegisterPage() {
   return (

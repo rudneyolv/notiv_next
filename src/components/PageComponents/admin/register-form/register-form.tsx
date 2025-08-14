@@ -1,6 +1,7 @@
 /** @format */
 "use client";
 
+import { Text } from "@/components/Text/Text";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,12 +12,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAdminAuth } from "@/hooks/queries/admin/use-admin-auth";
+import { useApiQueries } from "@/hooks/queries";
 import { RegisterFormType, RegisterSchema } from "@/schemas/admin/register-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function RegisterForm() {
+  const router = useRouter();
+
   const form = useForm<RegisterFormType>({
     resolver: zodResolver(RegisterSchema),
     mode: "onTouched",
@@ -27,10 +32,18 @@ export function RegisterForm() {
     },
   });
 
-  const { mutate: register, isPending } = useAdminAuth.register();
+  const { mutate: register, isPending, error } = useApiQueries.auth.register();
 
   const handleSubmit = (values: RegisterFormType) => {
-    register(values);
+    register(values, {
+      onSuccess: () => {
+        toast.success("Registro efetuado com sucesso.");
+        router.push("/login");
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
   };
 
   return (
@@ -39,7 +52,7 @@ export function RegisterForm() {
         onSubmit={form.handleSubmit(handleSubmit)}
         className="
           w-full max-w-80
-          flex flex-col items-center gap-4
+          flex flex-col justify-start items-start gap-4
           p-4 border rounded-xl
         "
       >
@@ -85,6 +98,13 @@ export function RegisterForm() {
             </FormItem>
           )}
         />
+
+        {error &&
+          error.messages.map((message, index) => (
+            <Text className="text-destructive" key={`${index} - ${message}`}>
+              {message}
+            </Text>
+          ))}
 
         <Button className="w-full" type="submit" isLoading={isPending}>
           Registrar-se

@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useAdminPosts } from "@/hooks/queries/admin/use-admin-posts";
+import { usePosts } from "@/hooks/queries/posts-queries";
 /** @format */
 
 import { PostDataProps } from "@/interfaces/posts/post-interface";
@@ -37,7 +37,7 @@ import { toast } from "sonner";
 
 export function AdminPostsTable({ posts }: { posts: PostDataProps[] }) {
   const [postToDelete, setPostToDelete] = useState<PostDataProps | null>(null);
-  const { mutate: deletePost, isPending: isPendingDeletePost } = useAdminPosts.delete();
+  const { mutate: deletePost, isPending: isPendingDeletePost } = usePosts.delete();
 
   // Função para lidar com a deleção
   const handleDeletePost = async () => {

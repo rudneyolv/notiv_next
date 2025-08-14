@@ -47,7 +47,7 @@ const useFetchPostBySlug = (slug: string): UseQueryResult<PostDataProps, Error> 
   });
 };
 
-export const useAdminPosts = {
+export const usePosts = {
   create: useCreateNewPost,
   delete: useDeletePost,
   edit: useEditPost,

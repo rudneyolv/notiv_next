@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAdminAuth } from "@/hooks/queries/admin/use-admin-auth";
+import { useAuth } from "@/hooks/queries/auth-queries";
 import { LoginFormType, LoginSchema } from "@/schemas/admin/login-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -28,7 +28,7 @@ export function LoginForm() {
     },
   });
 
-  const { mutate: Login, isPending } = useAdminAuth.login();
+  const { mutate: Login, isPending } = useAuth.login();
 
   const handleSubmit = (data: LoginFormType) => {
     console.log("handle submit");

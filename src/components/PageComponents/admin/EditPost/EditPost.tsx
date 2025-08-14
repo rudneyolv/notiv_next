@@ -4,7 +4,7 @@
 import PostForm from "@/components/PageComponents/admin/PostForm/PostForm";
 import { Text } from "@/components/Text/Text";
 import { Button } from "@/components/ui/button";
-import { useAdminPosts } from "@/hooks/queries/admin/use-admin-posts";
+import { usePosts } from "@/hooks/queries/posts-queries";
 import { FormPostData } from "@/schemas/admin/posts/new-post-schema";
 import { isError } from "@/utils/errors";
 import { Loader2 } from "lucide-react";
@@ -16,8 +16,8 @@ export default function EditPost({ slug }: { slug: string }) {
     data: postData,
     isLoading: isLoadingPostData,
     error: fetchPostError,
-  } = useAdminPosts.fetchBySlug(slug);
-  const { mutate: editPost, isPending, error: mutateError } = useAdminPosts.edit();
+  } = usePosts.fetchBySlug(slug);
+  const { mutate: editPost, isPending, error: mutateError } = usePosts.edit();
   const router = useRouter();
 
   const onSubmit = (newPostData: FormPostData) => {

@@ -1,6 +1,6 @@
 /** @format */
 
-import { postsApi } from "@/api/posts/posts-api";
+import { postsApi } from "@/api/posts-api";
 import { Markdown } from "@/components/Markdown/Markdown";
 import { Post } from "@/components/Post";
 import { Text } from "@/components/Text/Text";

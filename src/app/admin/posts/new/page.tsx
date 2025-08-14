@@ -6,10 +6,10 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PostForm from "@/components/PageComponents/admin/PostForm/PostForm";
 import { isError } from "@/utils/errors";
-import { useAdminPosts } from "@/hooks/queries/admin/use-admin-posts";
+import { usePosts } from "@/hooks/queries/posts-queries";
 
 export default function NewPost() {
-  const { mutate: createPost, isPending, error } = useAdminPosts.create();
+  const { mutate: createPost, isPending, error } = usePosts.create();
   const router = useRouter();
 
   const onSubmit = (postData: FormPostData) => {

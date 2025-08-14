@@ -1,6 +1,6 @@
 /** @format */
 
-import { postsApi } from "@/api/posts/posts-api";
+import { postsApi } from "@/api/posts-api";
 import { Post } from "@/components/Post";
 import { Text } from "@/components/Text/Text";
 import { PostDataProps } from "@/interfaces/posts/post-interface";

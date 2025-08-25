@@ -1,6 +1,6 @@
 /** @format */
 
-import { TextStyles } from "./Text-Styles";
+import { TextStyles } from "./text-styles";
 import { twMerge } from "tailwind-merge";
 
 interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {

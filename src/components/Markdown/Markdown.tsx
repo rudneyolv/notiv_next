@@ -3,7 +3,7 @@
 import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
-import { MarkdownStyles } from "./Markdown-Styles";
+import { MarkdownStyles } from "./markdown-styles";
 
 type MarkdownProps = {
   markdown: string;

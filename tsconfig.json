@@ -27,7 +27,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/Header/Header"
+    "src/components/header/Header",
+    ".next/types/app/admin/posts/page.tsx"
   ],
   "exclude": ["node_modules"]
 }

@@ -1,13 +1,14 @@
 /** @format */
 
 import { api } from "@/api";
+import { LoginFormType } from "@/schemas/admin/login-schema";
 import { RegisterFormType } from "@/schemas/admin/register-schema";
-import { ApiError } from "@/schemas/api-schemas";
-import { User } from "@/schemas/users-schema";
+import { ApiError } from "@/types/api-types";
+import { User } from "@/types/users-types";
 import { useMutation } from "@tanstack/react-query";
 
 const useLogin = () => {
-  return useMutation({
+  return useMutation<User, ApiError, LoginFormType>({
     mutationFn: api.auth.login,
   });
 };

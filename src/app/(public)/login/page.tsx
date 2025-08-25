@@ -1,6 +1,6 @@
 /** @format */
 
-import { LoginForm } from "@/components/PageComponents/admin/LoginForm/LoginForm";
+import { LoginForm } from "@/components/forms/login-form/login-form";
 
 export default function LoginPage() {
   return (

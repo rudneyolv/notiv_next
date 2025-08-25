@@ -3,10 +3,11 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { Sofia_Sans } from "next/font/google";
-import { Footer } from "@/components/Footer/Footer";
-import { Header } from "@/components/Header/Header";
 import { CustomQueryClientProvider } from "@/providers/query-client-provider";
 import { Toaster } from "sonner";
+import { Header } from "@/components/header/header";
+import { cookies } from "next/headers";
+import { Footer } from "@/components/footer/footer";
 
 export const metadata: Metadata = {
   title: {
@@ -24,15 +25,18 @@ const sofiaSans = Sofia_Sans({
   fallback: ["sans-serif"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookiesStore = await cookies();
+  const isLogged = !!cookiesStore.get("access_token");
+
   return (
     <html lang="en">
       <body className={`antialiased dark ${sofiaSans.className}`}>
-        <Header />
+        <Header isLogged={isLogged} />
         <Toaster position="bottom-center" />
         <CustomQueryClientProvider>{children}</CustomQueryClientProvider>
         <Footer />

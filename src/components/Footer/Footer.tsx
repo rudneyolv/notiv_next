@@ -1,4 +1,6 @@
-import { Text } from "../Text/Text";
+/** @format */
+
+import { Text } from "../text/text";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();

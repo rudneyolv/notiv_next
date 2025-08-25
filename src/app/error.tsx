@@ -1,7 +1,7 @@
 /** @format */
 "use client";
 
-import { Text } from "@/components/Text/Text";
+import { Text } from "@/components/text/text";
 import { isError } from "@/utils/errors";
 
 interface RootErrorProps {

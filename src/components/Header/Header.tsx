@@ -9,8 +9,6 @@ import {
 } from "@/components/ui/navigation-menu";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { CircleUserRound, Home, LogIn, UserRoundPen } from "lucide-react";
-import { useMemo } from "react";
 import { getHeaderRoutes } from "./header-routes";
 import Link from "next/link";
 

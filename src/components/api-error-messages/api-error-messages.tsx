@@ -3,7 +3,7 @@
 import { Text } from "../text/text";
 
 export function ApiErrorMessages({ messages }: { messages: string[] }) {
-  if (!messages.length) {
+  if (!messages?.length) {
     return <Text>Não há erros a serem exibidos</Text>;
   }
 

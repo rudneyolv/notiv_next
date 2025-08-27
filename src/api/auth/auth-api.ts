@@ -3,10 +3,9 @@
 import { env } from "@/constants/env";
 import { LoginFormType } from "@/schemas/admin/login-schema";
 import { RegisterFormType } from "@/schemas/admin/register-schema";
-import { ApiError, ApiErrorSchema } from "@/schemas/api-schemas";
-import { User, UserSchema } from "@/schemas/users-schema";
-import { createFallbackApiError } from "@/utils/create-api-error";
-import { isApiError } from "@/utils/is-api-error";
+import { ApiError } from "@/schemas/api-error-schema";
+import { User } from "@/types/users-types";
+import { utils } from "@/utils";
 
 const login = async (data: LoginFormType) => {
   try {
@@ -27,10 +26,10 @@ const login = async (data: LoginFormType) => {
 
     return result as User;
   } catch (error) {
-    if (isApiError(error)) {
+    if (utils.errors.isApiError(error)) {
       throw error as ApiError;
     } else {
-      throw createFallbackApiError("Erro desconhecido ao efetuar login");
+      throw utils.errors.createFallbackApiError("Erro desconhecido ao efetuar login");
     }
   }
 };
@@ -53,10 +52,10 @@ const register = async (data: RegisterFormType): Promise<User> => {
 
     return result as User;
   } catch (error: unknown) {
-    if (isApiError(error)) {
+    if (utils.errors.isApiError(error)) {
       throw error as ApiError;
     } else {
-      throw createFallbackApiError("Erro desconhecido ao registrar");
+      throw utils.errors.createFallbackApiError("Erro desconhecido ao registrar");
     }
   }
 };

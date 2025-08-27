@@ -20,11 +20,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useApiQueries } from "@/hooks/queries";
-import { usePosts } from "@/hooks/queries/posts-queries";
 /** @format */
 
 import { Post } from "@/types/posts-types";
-import { isError } from "@/utils/errors";
 import {
   createColumnHelper,
   flexRender,
@@ -32,17 +30,22 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Check, Loader2, Pen, Trash, X } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ApiErrorMessages } from "../api-error-messages/api-error-messages";
+import { utils } from "@/utils";
 
 //TODO: Se necessário, componentizar
 export function PostsTable({ posts }: { posts: Post[] }) {
   const router = useRouter();
 
   const [postToDelete, setPostToDelete] = useState<Post | null>(null);
-  const { mutate: deletePost, isPending: isPendingDeletePost } = useApiQueries.posts.delete();
+  const {
+    mutate: deletePost,
+    isPending: isPendingDeletePost,
+    error,
+  } = useApiQueries.posts.delete();
 
   // Função para lidar com a deleção
   const handleDeletePost = async () => {
@@ -52,10 +55,6 @@ export function PostsTable({ posts }: { posts: Post[] }) {
       onSuccess: () => {
         toast.success("Post deletado com sucesso");
         setPostToDelete(null);
-      },
-
-      onError: (error: unknown) => {
-        toast.error(isError(error) ? error.message : "Erro ao excluir post");
       },
     });
   };
@@ -187,6 +186,8 @@ export function PostsTable({ posts }: { posts: Post[] }) {
               desfeita.`}
             </DialogDescription>
           </DialogHeader>
+
+          {error && <ApiErrorMessages messages={utils.errors.parseApiError(error).messages} />}
 
           <div className="w-full flex flex-row gap-2 items-center justify-end pt-4">
             <DialogClose asChild>

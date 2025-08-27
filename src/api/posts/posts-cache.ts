@@ -2,12 +2,25 @@
 
 import { NextCacheConfig } from "@/types/cache-types";
 
+export const postsApiCacheTags = {
+  posts: (): "posts" => "posts",
+  deletePost: (): "delete-post" => "delete-post",
+  editPost: (): "edit-post" => "edit-post",
+  createPost: (): "create-post" => "create-post",
+  slug: (slug: string): `post-${string}` => `post-${slug}`,
+};
+
 export const postsApiCacheOptions = {
   fetchAll: (): NextCacheConfig => ({
     cache: "force-cache",
     next: {
       revalidate: 100,
-      tags: ["posts", "delete-post", "edit-post", "create-post"],
+      tags: [
+        postsApiCacheTags.posts(),
+        postsApiCacheTags.deletePost(),
+        postsApiCacheTags.editPost(),
+        postsApiCacheTags.createPost(),
+      ],
     },
   }),
 
@@ -15,7 +28,7 @@ export const postsApiCacheOptions = {
     cache: "force-cache",
     next: {
       revalidate: 100,
-      tags: [`post-${slug}`],
+      tags: [postsApiCacheTags.slug(slug)],
     },
   }),
 };

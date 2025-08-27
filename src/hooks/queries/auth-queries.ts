@@ -3,7 +3,7 @@
 import { api } from "@/api";
 import { LoginFormType } from "@/schemas/admin/login-schema";
 import { RegisterFormType } from "@/schemas/admin/register-schema";
-import { ApiError } from "@/types/api-types";
+import { ApiError } from "@/schemas/api-error-schema";
 import { User } from "@/types/users-types";
 import { useMutation } from "@tanstack/react-query";
 

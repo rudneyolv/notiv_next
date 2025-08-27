@@ -7,7 +7,7 @@ import { Text } from "@/components/text/text";
 import { images } from "@/constants/images-constants";
 import { Post as PostType } from "@/types/posts-types";
 import { formatDatetime, formatRelativeDateToNow } from "@/utils/format-datetime";
-import { isApiError } from "@/utils/is-api-error";
+import { utils } from "@/utils";
 
 export const PostsList = async () => {
   let posts: PostType[] = [];
@@ -15,8 +15,8 @@ export const PostsList = async () => {
   try {
     posts = await api.posts.cached.fetchAll();
   } catch (error) {
-    const errorMessages = isApiError(error) ? error.messages : ["Erro ao buscar posts"];
-    return <ApiErrorMessages messages={errorMessages} />;
+    const parsedError = utils.errors.parseApiError(error);
+    return <ApiErrorMessages messages={parsedError.messages} />;
   }
 
   if (posts.length === 0) {

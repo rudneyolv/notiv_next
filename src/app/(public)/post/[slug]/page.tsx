@@ -1,6 +1,5 @@
 /** @format */
 
-import CustomLink from "@/components/CustomLink/CustomLink";
 import { Suspense } from "react";
 import { Text } from "@/components/text/text";
 import PostDetails from "@/components/page-components/post/post-details/post-details";

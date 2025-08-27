@@ -1,7 +1,6 @@
 /** @format */
 "use client";
 
-import { Text } from "@/components/text/text";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -22,9 +21,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { ImageUpload } from "@/components/image-upload/image-upload";
 import { ClientMarkdownEditor } from "@/components/markdown-editor/client-markdown-editor";
 import { FormPostData, PostSchema } from "@/schemas/admin/posts/new-post-schema";
-import { PostFormContainerStyles, PostFormStyles } from "./PostForm-Styles";
+import { PostFormContainerStyles, PostFormStyles } from "./post-form-styles";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ApiError } from "@/types/api-types";
+import { ApiError } from "@/schemas/api-error-schema";
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
 
 interface PostFormProps {
@@ -45,6 +44,8 @@ export default function PostForm({ postData, onSubmit, isPending, error }: PostF
       published: true,
     },
   });
+
+  console.log(error);
 
   return (
     <div className={PostFormContainerStyles()}>

@@ -4,9 +4,10 @@
 import { Text } from "@/components/text/text";
 import { PostsTable } from "../../../posts-table/posts-table";
 import { useApiQueries } from "@/hooks/queries";
-import { isApiError } from "@/utils/is-api-error";
+import { isApiError } from "@/utils/errors/is-api-error";
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
 import { Loader2 } from "lucide-react";
+import { utils } from "@/utils";
 
 export const MyPosts = () => {
   const { data, error, isLoading } = useApiQueries.posts.fetchAllMe();
@@ -14,8 +15,9 @@ export const MyPosts = () => {
   if (isLoading) return <Loader2 className="animate-spin" />;
 
   if (error) {
-    const errorMessages = isApiError(error) ? error.messages : ["Erro ao buscar seus posts"];
-    return <ApiErrorMessages messages={errorMessages} />;
+    const parsedError = utils.errors.parseApiError(error);
+
+    return <ApiErrorMessages messages={parsedError.messages} />;
   }
 
   if (!data || data?.length <= 0) {

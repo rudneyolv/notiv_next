@@ -1,61 +1,66 @@
 /** @format */
 "use client";
 
-import { Text } from "@/components/text/text";
 import { Button } from "@/components/ui/button";
-import { usePosts } from "@/hooks/queries/posts-queries";
 import { FormPostData } from "@/schemas/admin/posts/new-post-schema";
-import { isError } from "@/utils/errors";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import PostForm from "../../../forms/post-form/PostForm";
 import { useApiQueries } from "@/hooks/queries";
+import { ApiError } from "@/schemas/api-error-schema";
+import { utils } from "@/utils";
+import PostForm from "@/components/forms/post-form/post-form";
+import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
 
-// CONTINUE: Seguir com a parte de edição do post
 export default function EditPost({ slug }: { slug: string }) {
-  const {
-    data: postData,
-    isLoading: isLoadingPostData,
-    error: fetchPostError,
-  } = useApiQueries.posts.fetchBySlug(slug);
+  let parsedMutateError: ApiError | null = null;
 
-  const { mutate: editPost, isPending, error: mutateError } = useApiQueries.posts.edit();
   const router = useRouter();
+
+  const { data: postData, isLoading, error: fetchError } = useApiQueries.posts.fetchBySlug(slug);
+  const { mutate: editPost, isPending, error: mutateError } = useApiQueries.posts.edit();
+
+  if (mutateError) {
+    parsedMutateError = utils.errors.parseApiError(mutateError);
+  }
 
   const onSubmit = (editPostData: FormPostData) => {
     if (!postData) return;
 
-    // Passamos o ID para saber qual post atualizar
-    // e a imageUrl existente para manter a imagem atual caso o usuário não envie uma nova
-    editPost(
-      { ...editPostData, id: postData.id, imageUrl: postData.imageUrl },
-      {
-        onSuccess: () => {
-          toast.success("Post editado com sucesso!");
-          router.push("/my-profile/posts");
-        },
-      }
-    );
+    //TODO: Checar melhorias na parte de manter imageUrl
+
+    // ID passado para saber qual post atualizar
+    // imageUrl existente para manter a imagem atual caso o usuário não envie uma nova image(File)
+    const updatePostDto = { ...editPostData, id: postData.id, imageUrl: postData.imageUrl };
+
+    editPost(updatePostDto, {
+      onSuccess: () => {
+        toast.success("Post editado com sucesso!");
+        router.push("/my-profile/posts");
+      },
+    });
   };
 
-  if (isLoadingPostData || !postData)
-    return (
-      <div className="h-dvh w-dvw flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin" />
-      </div>
-    );
+  if (fetchError) {
+    const parsedFetchError = utils.errors.parseApiError(fetchError);
 
-  if (fetchPostError) {
     return (
       <div className="h-dvh w-dvw flex flex-col items-center justify-center">
-        <Text className="text-destructive">{fetchPostError?.message || `Erro ao buscar post`}</Text>
+        <ApiErrorMessages messages={parsedFetchError.messages} />
+
         <Button onClick={() => router.back()} variant="outline">
           Voltar
         </Button>
       </div>
     );
   }
+
+  if (isLoading || !postData)
+    return (
+      <div className="h-dvh w-dvw flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
 
   return (
     <PostForm
@@ -67,7 +72,7 @@ export default function EditPost({ slug }: { slug: string }) {
         content: postData.content,
       }}
       isPending={isPending}
-      error={mutateError}
+      error={parsedMutateError}
       onSubmit={onSubmit}
     />
   );

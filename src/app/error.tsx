@@ -2,7 +2,6 @@
 "use client";
 
 import { Text } from "@/components/text/text";
-import { isError } from "@/utils/errors";
 
 interface RootErrorProps {
   error: unknown;
@@ -14,7 +13,9 @@ export default function RootError({ error }: RootErrorProps) {
   return (
     <div className="w-dvw h-dvh bg-zinc-900 flex flex-col items-center justify-center">
       <Text className="font-bold text-xl sm:text-3xl">Ocorreu um erro na aplicação</Text>
-      <Text className="text-gray-400">{isError(error) ? error.message : "Erro desconhecido"}</Text>
+      <Text className="text-gray-400">
+        {error instanceof Error ? error.message : "Erro desconhecido"}
+      </Text>
     </div>
   );
 }

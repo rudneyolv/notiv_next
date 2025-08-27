@@ -7,7 +7,7 @@ import { PostCard } from "@/components/blocks/post-card";
 import { Text } from "@/components/text/text";
 import { Post as PostType } from "@/types/posts-types";
 import { formatDatetime, formatRelativeDateToNow } from "@/utils/format-datetime";
-import { isApiError } from "@/utils/is-api-error";
+import { utils } from "@/utils";
 
 interface PostDetailsProps {
   slug: string;
@@ -19,8 +19,8 @@ export default async function PostDetails({ slug }: PostDetailsProps) {
   try {
     post = await api.posts.cached.fetchBySlug(slug);
   } catch (error: unknown) {
-    const errorMessages = isApiError(error) ? error.messages : ["Erro ao buscar posts"];
-    return <ApiErrorMessages messages={errorMessages} />;
+    const parsedError = utils.errors.parseApiError(error);
+    return <ApiErrorMessages messages={parsedError.messages} />;
   }
 
   if (!post) {

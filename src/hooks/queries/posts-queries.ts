@@ -40,9 +40,6 @@ const useEditPost = () => {
   return useMutation({
     mutationFn: api.posts.edit,
     onSuccess: (data) => {
-      revalidateCustomTag(`post-${data.slug}`);
-      revalidateCustomTag("edit-post");
-
       queryClient.invalidateQueries({ queryKey: ["my-posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", data.slug] });
     },
@@ -55,9 +52,6 @@ const useDeletePost = () => {
   return useMutation({
     mutationFn: api.posts.delete,
     onSuccess: (data) => {
-      revalidateCustomTag("delete-post");
-      revalidateCustomTag(`post-${data.slug}`);
-
       queryClient.invalidateQueries({ queryKey: ["my-posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", data.slug] });
     },

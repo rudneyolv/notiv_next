@@ -167,7 +167,12 @@ export const editPost = async (data: UpdatePostDto): Promise<Post> => {
       throw result;
     }
 
-    return result as Post;
+    const post: Post = result;
+
+    revalidateTag(`post-${post.slug}`);
+    revalidateTag("edit-post");
+
+    return post;
   } catch (error: unknown) {
     throw utils.errors.throwApiError({
       error,
@@ -195,7 +200,12 @@ export const deletePost = async (postid: string | number): Promise<Post> => {
       throw result;
     }
 
-    return result as Post;
+    const post: Post = result;
+
+    revalidateTag("delete-post");
+    revalidateTag(`post-${post.slug}`);
+
+    return post;
   } catch (error: unknown) {
     throw utils.errors.throwApiError({
       error,

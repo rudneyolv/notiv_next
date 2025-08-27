@@ -1,12 +1,12 @@
 /** @format */
 "use client";
 
-import { FormPostData } from "@/schemas/admin/posts/new-post-schema";
+import { PostFormData } from "@/schemas/posts/post-form-schema";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PostForm from "@/components/forms/post-form/post-form";
 import { useApiQueries } from "@/hooks/queries";
-import { ApiError } from "@/schemas/api-error-schema";
+import { ApiError } from "@/schemas/api/api-error-schema";
 import { utils } from "@/utils";
 
 export default function NewPost() {
@@ -20,7 +20,7 @@ export default function NewPost() {
     parsedError = utils.errors.parseApiError(error);
   }
 
-  const onSubmit = async (postData: FormPostData) => {
+  const onSubmit = async (postData: PostFormData) => {
     createPost(postData, {
       onSuccess: () => {
         toast.success("Post criado com sucesso!");

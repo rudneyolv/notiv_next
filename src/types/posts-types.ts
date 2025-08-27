@@ -1,6 +1,6 @@
 /** @format */
 
-import { FormPostData } from "@/schemas/admin/posts/new-post-schema";
+import { PostFormData } from "@/schemas/posts/post-form-schema";
 import { User } from "@/types/users-types";
 
 export interface Post {
@@ -16,9 +16,9 @@ export interface Post {
   author: User;
 }
 
-export type CreatePostDto = FormPostData;
+export type CreatePostDto = PostFormData;
 
-export interface UpdatePostDto extends FormPostData {
+export interface UpdatePostDto extends PostFormData {
   id: string;
   imageUrl?: string | null;
 }

@@ -7,4 +7,4 @@ export const LoginSchema = z.object({
   password: z.string(),
 });
 
-export type LoginFormType = z.infer<typeof LoginSchema>;
+export type LoginDto = z.infer<typeof LoginSchema>;

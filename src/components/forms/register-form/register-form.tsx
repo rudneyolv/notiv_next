@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useApiQueries } from "@/hooks/queries";
-import { RegisterFormType, RegisterSchema } from "@/schemas/admin/register-schema";
+import { RegisterDto, RegisterSchema } from "@/schemas/auth/register-schema";
 import { utils } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -23,7 +23,7 @@ import { toast } from "sonner";
 export function RegisterForm() {
   const router = useRouter();
 
-  const form = useForm<RegisterFormType>({
+  const form = useForm<RegisterDto>({
     resolver: zodResolver(RegisterSchema),
     mode: "onTouched",
     defaultValues: {
@@ -35,7 +35,7 @@ export function RegisterForm() {
 
   const { mutate: register, isPending, error } = useApiQueries.auth.register();
 
-  const handleSubmit = (values: RegisterFormType) => {
+  const handleSubmit = (values: RegisterDto) => {
     register(values, {
       onSuccess: () => {
         toast.success("Registro efetuado com sucesso.");

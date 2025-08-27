@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 
-export const PostSchema = z.object({
+export const PostFormSchema = z.object({
   title: z
     .string()
     .min(5, { message: "O título deve ter no mínimo 5 caracteres." })
@@ -23,4 +23,4 @@ export const PostSchema = z.object({
   published: z.boolean(),
 });
 
-export type FormPostData = z.infer<typeof PostSchema>;
+export type PostFormData = z.infer<typeof PostFormSchema>;

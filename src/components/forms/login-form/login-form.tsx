@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useApiQueries } from "@/hooks/queries";
-import { LoginFormType, LoginSchema } from "@/schemas/admin/login-schema";
+import { LoginDto, LoginSchema } from "@/schemas/auth/login-schema";
 import { utils } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -22,7 +22,7 @@ import { toast } from "sonner";
 
 export function LoginForm() {
   const router = useRouter();
-  const form = useForm<LoginFormType>({
+  const form = useForm<LoginDto>({
     resolver: zodResolver(LoginSchema),
     mode: "onBlur",
 
@@ -34,7 +34,7 @@ export function LoginForm() {
 
   const { mutate: Login, isPending, error } = useApiQueries.auth.login();
 
-  const handleSubmit = (data: LoginFormType) => {
+  const handleSubmit = (data: LoginDto) => {
     Login(data, {
       onSuccess: () => {
         toast.success("Login com sucesso!");

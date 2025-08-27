@@ -20,22 +20,22 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUpload } from "@/components/image-upload/image-upload";
 import { ClientMarkdownEditor } from "@/components/markdown-editor/client-markdown-editor";
-import { FormPostData, PostSchema } from "@/schemas/admin/posts/new-post-schema";
+import { PostFormData, PostFormSchema } from "@/schemas/posts/post-form-schema";
 import { PostFormContainerStyles, PostFormStyles } from "./post-form-styles";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ApiError } from "@/schemas/api-error-schema";
+import { ApiError } from "@/schemas/api/api-error-schema";
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
 
 interface PostFormProps {
-  postData?: FormPostData;
-  onSubmit: (postData: FormPostData) => void;
+  postData?: PostFormData;
+  onSubmit: (postData: PostFormData) => void;
   isPending: boolean;
   error: ApiError | null;
 }
 
 export default function PostForm({ postData, onSubmit, isPending, error }: PostFormProps) {
-  const form = useForm<z.infer<typeof PostSchema>>({
-    resolver: zodResolver(PostSchema),
+  const form = useForm<z.infer<typeof PostFormSchema>>({
+    resolver: zodResolver(PostFormSchema),
     mode: "onBlur",
     defaultValues: postData ?? {
       title: "",

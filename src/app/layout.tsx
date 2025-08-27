@@ -36,10 +36,12 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased dark ${sofiaSans.className}`}>
-        <Header isLogged={isLogged} />
-        <Toaster position="bottom-center" />
-        <CustomQueryClientProvider>{children}</CustomQueryClientProvider>
-        <Footer />
+        <CustomQueryClientProvider>
+          <Header isLogged={isLogged} />
+          <Toaster position="bottom-center" />
+          {children}
+          <Footer />
+        </CustomQueryClientProvider>
       </body>
     </html>
   );

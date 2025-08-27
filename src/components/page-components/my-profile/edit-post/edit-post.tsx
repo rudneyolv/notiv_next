@@ -2,12 +2,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { FormPostData } from "@/schemas/admin/posts/new-post-schema";
+import { PostFormData } from "@/schemas/posts/post-form-schema";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useApiQueries } from "@/hooks/queries";
-import { ApiError } from "@/schemas/api-error-schema";
+import { ApiError } from "@/schemas/api/api-error-schema";
 import { utils } from "@/utils";
 import PostForm from "@/components/forms/post-form/post-form";
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
@@ -24,7 +24,7 @@ export default function EditPost({ slug }: { slug: string }) {
     parsedMutateError = utils.errors.parseApiError(mutateError);
   }
 
-  const onSubmit = (editPostData: FormPostData) => {
+  const onSubmit = (editPostData: PostFormData) => {
     if (!postData) return;
 
     //TODO: Checar melhorias na parte de manter imageUrl

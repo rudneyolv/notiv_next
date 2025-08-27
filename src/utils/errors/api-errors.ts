@@ -1,6 +1,6 @@
 /** @format */
 
-import { ApiError, apiErrorSchema } from "@/schemas/api-error-schema";
+import { ApiError, apiErrorSchema } from "@/schemas/api/api-error-schema";
 import { ZodError } from "zod";
 
 interface ThrowApiErrorProps {

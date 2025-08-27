@@ -2,7 +2,7 @@
 "use server";
 
 import { env } from "@/constants/env";
-import { ApiError } from "@/schemas/api-error-schema";
+import { ApiError } from "@/schemas/api/api-error-schema";
 import { utils } from "@/utils";
 import { cookies } from "next/headers";
 

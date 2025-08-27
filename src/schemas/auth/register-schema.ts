@@ -14,4 +14,4 @@ export const RegisterSchema = z.object({
     .min(6, { message: "A senha deve ter no mínimo 6 caracteres." }),
 });
 
-export type RegisterFormType = z.infer<typeof RegisterSchema>;
+export type RegisterDto = z.infer<typeof RegisterSchema>;

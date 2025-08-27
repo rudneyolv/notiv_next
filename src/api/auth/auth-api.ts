@@ -1,12 +1,12 @@
 /** @format */
 
 import { env } from "@/constants/env";
-import { LoginFormType } from "@/schemas/admin/login-schema";
-import { RegisterFormType } from "@/schemas/admin/register-schema";
+import { LoginDto } from "@/schemas/auth/login-schema";
+import { RegisterDto } from "@/schemas/auth/register-schema";
 import { User } from "@/types/users-types";
 import { utils } from "@/utils";
 
-export const authLogin = async (data: LoginFormType) => {
+export const authLogin = async (data: LoginDto) => {
   try {
     const response = await fetch(`${env.API_URL}/auth/login`, {
       method: "POST",
@@ -32,7 +32,7 @@ export const authLogin = async (data: LoginFormType) => {
   }
 };
 
-export const authRegister = async (data: RegisterFormType): Promise<User> => {
+export const authRegister = async (data: RegisterDto): Promise<User> => {
   try {
     const response = await fetch(`${env.API_URL}/users`, {
       method: "POST",

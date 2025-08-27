@@ -3,11 +3,10 @@
 import { env } from "@/constants/env";
 import { LoginFormType } from "@/schemas/admin/login-schema";
 import { RegisterFormType } from "@/schemas/admin/register-schema";
-import { ApiError } from "@/schemas/api-error-schema";
 import { User } from "@/types/users-types";
 import { utils } from "@/utils";
 
-const login = async (data: LoginFormType) => {
+export const authLogin = async (data: LoginFormType) => {
   try {
     const response = await fetch(`${env.API_URL}/auth/login`, {
       method: "POST",
@@ -26,15 +25,14 @@ const login = async (data: LoginFormType) => {
 
     return result as User;
   } catch (error) {
-    if (utils.errors.isApiError(error)) {
-      throw error as ApiError;
-    } else {
-      throw utils.errors.createFallbackApiError("Erro desconhecido ao efetuar login");
-    }
+    throw utils.errors.throwApiError({
+      error,
+      fallbackMessage: "Erro desconhecido ao efetuar login",
+    });
   }
 };
 
-const register = async (data: RegisterFormType): Promise<User> => {
+export const authRegister = async (data: RegisterFormType): Promise<User> => {
   try {
     const response = await fetch(`${env.API_URL}/users`, {
       method: "POST",
@@ -52,15 +50,9 @@ const register = async (data: RegisterFormType): Promise<User> => {
 
     return result as User;
   } catch (error: unknown) {
-    if (utils.errors.isApiError(error)) {
-      throw error as ApiError;
-    } else {
-      throw utils.errors.createFallbackApiError("Erro desconhecido ao registrar");
-    }
+    throw utils.errors.throwApiError({
+      error,
+      fallbackMessage: "Erro desconhecido ao registrar",
+    });
   }
-};
-
-export const authApi = {
-  register,
-  login,
 };

@@ -1,6 +1,6 @@
 /** @format */
 
-import { authApi } from "./auth/auth-api";
+import { authApi } from "./auth";
 import { postsApi } from "./posts";
 import { usersApi } from "./users/users-api";
 

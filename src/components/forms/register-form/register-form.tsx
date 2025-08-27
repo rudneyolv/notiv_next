@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useApiQueries } from "@/hooks/queries";
 import { RegisterFormType, RegisterSchema } from "@/schemas/admin/register-schema";
+import { utils } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -96,7 +97,7 @@ export function RegisterForm() {
           )}
         />
 
-        {error?.messages && <ApiErrorMessages messages={error.messages} />}
+        {error && <ApiErrorMessages messages={utils.errors.parseApiError(error).messages} />}
 
         <Button className="w-full" type="submit" isLoading={isPending}>
           Registrar-se

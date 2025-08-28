@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import InputPassword from "@/components/ui/input-password";
 import { useApiQueries } from "@/hooks/queries";
 import { LoginDto, LoginSchema } from "@/schemas/auth/login-schema";
 import { utils } from "@/utils";
@@ -74,7 +75,7 @@ export function LoginForm() {
             <FormItem className="w-full">
               <FormLabel>Sua senha</FormLabel>
               <FormControl>
-                <Input {...field} disabled={isPending} />
+                <InputPassword {...field} disabled={isPending} />
               </FormControl>
               <FormMessage />
             </FormItem>

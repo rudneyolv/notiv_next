@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import InputPassword from "@/components/ui/input-password";
 import { useApiQueries } from "@/hooks/queries";
 import { RegisterDto, RegisterSchema } from "@/schemas/auth/register-schema";
 import { utils } from "@/utils";
@@ -90,7 +91,7 @@ export function RegisterForm() {
             <FormItem className="w-full">
               <FormLabel>Sua senha</FormLabel>
               <FormControl>
-                <Input {...field} disabled={isPending} />
+                <InputPassword {...field} disabled={isPending} />
               </FormControl>
               <FormMessage />
             </FormItem>

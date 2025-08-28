@@ -1,12 +1,12 @@
 /** @format */
 
 import dynamic from "next/dynamic";
-import { Text } from "../text/text";
+import { Skeleton } from "../ui/skeleton";
 
 export const ClientMarkdownEditor = dynamic(
   () => import("./markdown-editor").then((mod) => mod.MarkdownEditor),
   {
     ssr: false,
-    loading: () => <Text>Carregando editor...</Text>,
+    loading: () => <Skeleton className="w-full h-[400px]" />,
   }
 );

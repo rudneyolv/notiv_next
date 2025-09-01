@@ -8,6 +8,8 @@ import { Text } from "@/components/text/text";
 import { Post as PostType } from "@/types/posts-types";
 import { formatDatetime, formatRelativeDateToNow } from "@/utils/format-datetime";
 import { utils } from "@/utils";
+import { CircleDivide } from "lucide-react";
+import { images } from "@/constants/images-constants";
 
 interface PostDetailsProps {
   slug: string;
@@ -28,19 +30,19 @@ export default async function PostDetails({ slug }: PostDetailsProps) {
   }
 
   return (
-    <PostCard.Root variant="col" key={post.id}>
-      {typeof post.imageUrl === "string" && <PostCard.Image src={post.imageUrl} alt={post.title} />}
+    <div className="w-full h-full flex flex-col gap-2">
+      <PostCard.Image src={post.imageUrl || images.fallbacks.post.banner} alt={post.title} />{" "}
       <PostCard.Content>
         <div>
-          <PostCard.Text>{post.author.name}</PostCard.Text>
+          <PostCard.Text className="sm:text-xl">{post.author.name}</PostCard.Text>
           <PostCard.Time datetime={post.createdAt} title={formatDatetime(post.createdAt)}>
             {formatRelativeDateToNow(post.createdAt)}
           </PostCard.Time>
         </div>
 
-        <PostCard.Heading>{post.title}</PostCard.Heading>
+        <PostCard.Heading className="sm:text-5xl font-bold">{post.title}</PostCard.Heading>
         <Markdown markdown={post.content} />
       </PostCard.Content>
-    </PostCard.Root>
+    </div>
   );
 }

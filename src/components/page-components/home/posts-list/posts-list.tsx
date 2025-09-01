@@ -29,9 +29,13 @@ export const PostsList = async () => {
         <PostCard.Root variant="col" key={post.id} href={`/post/${post.slug}`} className="">
           <PostCard.Image src={post.imageUrl || images.fallbacks.post.banner} alt={post.title} />{" "}
           <PostCard.Content>
-            <PostCard.Time datetime={post.createdAt} title={formatDatetime(post.createdAt)}>
-              {formatRelativeDateToNow(post.createdAt)}
-            </PostCard.Time>
+            <div>
+              <PostCard.Text>{post.author.name}</PostCard.Text>
+              <PostCard.Time datetime={post.createdAt} title={formatDatetime(post.createdAt)}>
+                {formatRelativeDateToNow(post.createdAt)}
+              </PostCard.Time>
+            </div>
+
             <PostCard.Heading>{post.title}</PostCard.Heading>
             <PostCard.Text>{post.summary}</PostCard.Text>
           </PostCard.Content>

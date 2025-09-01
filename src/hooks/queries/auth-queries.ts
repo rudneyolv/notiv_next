@@ -5,11 +5,26 @@ import { LoginDto } from "@/schemas/auth/login-schema";
 import { RegisterDto } from "@/schemas/auth/register-schema";
 import { ApiError } from "@/schemas/api/api-error-schema";
 import { User } from "@/types/users-types";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+const useValidateSession = () => {
+  return useQuery({
+    queryFn: api.auth.validateSession,
+    queryKey: ["logged"],
+    gcTime: 86400000, // 1 dia
+    staleTime: 86400000, // 1 dia
+    retry: 0,
+  });
+};
 
 const useLogin = () => {
+  const queryClient = useQueryClient();
+
   return useMutation<User, ApiError, LoginDto>({
     mutationFn: api.auth.login,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["logged"] });
+    },
   });
 };
 
@@ -20,6 +35,7 @@ const useRegister = () => {
 };
 
 export const useAuth = {
+  validateSession: useValidateSession,
   login: useLogin,
   register: useRegister,
 };

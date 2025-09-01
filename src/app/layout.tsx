@@ -5,9 +5,8 @@ import "@/styles/globals.css";
 import { Sofia_Sans } from "next/font/google";
 import { CustomQueryClientProvider } from "@/providers/query-client-provider";
 import { Toaster } from "sonner";
-import { Header } from "@/components/header/header";
-import { cookies } from "next/headers";
 import { Footer } from "@/components/footer/footer";
+import { Header } from "@/components/header/header";
 
 export const metadata: Metadata = {
   title: {
@@ -30,14 +29,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookiesStore = await cookies();
-  const isLogged = !!cookiesStore.get("access_token");
-
   return (
     <html lang="en">
       <body className={`antialiased dark ${sofiaSans.className}`}>
         <CustomQueryClientProvider>
-          <Header isLogged={isLogged} />
+          <Header />
           <Toaster position="bottom-center" />
           {children}
           <Footer />

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { MyPosts } from "@/components/page-components/my-profile/my-posts/my-posts";
 export default function AdminPosts() {
   return (
-    <div className="bg-background min-h-screen flex flex-col items-center justify-center p-8">
+    <div className="min-h-screen flex flex-col items-center justify-center p-8">
       <Heading>Notiv Admin</Heading>
 
       <div className="min-h-screen  w-full max-w-3xl p-12 flex flex-col items-center gap-2">

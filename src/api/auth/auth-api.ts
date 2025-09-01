@@ -6,7 +6,28 @@ import { RegisterDto } from "@/schemas/auth/register-schema";
 import { User } from "@/types/users-types";
 import { utils } from "@/utils";
 
-export const authLogin = async (data: LoginDto) => {
+export const validateSession = async (): Promise<{ logged: boolean }> => {
+  try {
+    const response = await fetch(`${env.API_URL}/auth/validate-session`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const result = await response.json();
+
+    console.log(result);
+
+    if (!response.ok) {
+      throw result;
+    }
+
+    return result as { logged: boolean };
+  } catch (error: unknown) {
+    throw utils.errors.throwApiError({ error, fallbackMessage: "Erro ao checar login" });
+  }
+};
+
+export const authLogin = async (data: LoginDto): Promise<User> => {
   try {
     const response = await fetch(`${env.API_URL}/auth/login`, {
       method: "POST",

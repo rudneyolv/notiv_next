@@ -39,7 +39,7 @@ export function LoginForm() {
     Login(data, {
       onSuccess: () => {
         toast.success("Login com sucesso!");
-        router.push("/my-profile");
+        router.push("/my-profile/posts");
       },
     });
   };

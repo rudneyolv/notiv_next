@@ -5,7 +5,7 @@ import { MiddlewareConfig, NextRequest, NextResponse } from "next/server";
 const publicRoutes = [
   { path: "/login", whenAuthenticated: "redirect" },
   { path: "/register", whenAuthenticated: "redirect" },
-  { path: "/pricing", whenAuthenticated: "next" },
+  { path: "/", whenAuthenticated: "next" },
 ] as const;
 
 const REDIRECT_WHEN_NOT_AUTHENTICATED = "/login";
@@ -17,7 +17,6 @@ function isTokenExpired(token: string): boolean {
   if (!payload) return true;
 
   const { exp } = JSON.parse(Buffer.from(payload, "base64").toString("utf-8"));
-  console.log(exp);
   return exp < Math.floor(Date.now() / 1000);
 }
 

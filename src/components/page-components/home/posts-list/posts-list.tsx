@@ -24,23 +24,25 @@ export const PostsList = async () => {
   }
 
   return (
-    <div className="grid md:grid-cols-2 gap-4">
-      {posts.map((post) => (
-        <PostCard.Root variant="col" key={post.id} href={`/post/${post.slug}`} className="">
-          <PostCard.Image src={post.imageUrl || images.fallbacks.post.banner} alt={post.title} />{" "}
-          <PostCard.Content>
-            <div>
-              <PostCard.Text>{post.author.name}</PostCard.Text>
-              <PostCard.Time datetime={post.createdAt} title={formatDatetime(post.createdAt)}>
-                {formatRelativeDateToNow(post.createdAt)}
-              </PostCard.Time>
-            </div>
+    <div className="w-full h-full flex flex-col gap-8">
+      <div className="grid md:grid-cols-2 gap-4">
+        {posts.map((post) => (
+          <PostCard.Root variant="col" key={post.id} href={`/post/${post.slug}`} className="">
+            <PostCard.Image src={post.imageUrl || images.fallbacks.post.banner} alt={post.title} />
+            <PostCard.Content>
+              <div>
+                <PostCard.Text className="sm:text-xl">{post.author.name}</PostCard.Text>
 
-            <PostCard.Heading>{post.title}</PostCard.Heading>
-            <PostCard.Text>{post.summary}</PostCard.Text>
-          </PostCard.Content>
-        </PostCard.Root>
-      ))}
+                <PostCard.Time datetime={post.createdAt} title={formatDatetime(post.createdAt)}>
+                  {formatRelativeDateToNow(post.createdAt)}
+                </PostCard.Time>
+              </div>
+              <PostCard.Heading>{post.title}</PostCard.Heading>
+              <PostCard.Text>{post.summary}</PostCard.Text>
+            </PostCard.Content>
+          </PostCard.Root>
+        ))}
+      </div>
     </div>
   );
 };

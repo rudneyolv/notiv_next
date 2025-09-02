@@ -14,7 +14,7 @@ export const postsApiCacheOptions = {
   fetchAll: (): NextCacheConfig => ({
     cache: "force-cache",
     next: {
-      revalidate: 100,
+      revalidate: 1000,
       tags: [
         postsApiCacheTags.posts(),
         postsApiCacheTags.deletePost(),
@@ -27,7 +27,7 @@ export const postsApiCacheOptions = {
   fetchBySlug: (slug: string): NextCacheConfig => ({
     cache: "force-cache",
     next: {
-      revalidate: 100,
+      revalidate: 1000,
       tags: [postsApiCacheTags.slug(slug)],
     },
   }),

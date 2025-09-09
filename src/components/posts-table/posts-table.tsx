@@ -36,7 +36,6 @@ import { toast } from "sonner";
 import { ApiErrorMessages } from "../api-error-messages/api-error-messages";
 import { utils } from "@/utils";
 
-//TODO: Se necessário, componentizar
 export function PostsTable({ posts }: { posts: Post[] }) {
   const router = useRouter();
 

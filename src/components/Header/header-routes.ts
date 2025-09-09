@@ -1,7 +1,16 @@
 /** @format */
 
 // header-routes.ts
-import { CircleUserRound, Home, LogIn, LucideIcon, Pen, StickyNote, UserPlus } from "lucide-react";
+import {
+  CircleUserRound,
+  Home,
+  LogIn,
+  LogOut,
+  LucideIcon,
+  Pen,
+  StickyNote,
+  UserPlus,
+} from "lucide-react";
 
 export type DirectRoute = {
   href: string;
@@ -66,6 +75,12 @@ export const privateRoutes: Route[] = [
         href: "/my-profile/edit",
         Icon: Pen,
         label: "Editar perfil",
+      },
+
+      {
+        href: "/logout",
+        Icon: LogOut,
+        label: "Sair",
       },
     ],
   },

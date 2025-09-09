@@ -36,6 +36,7 @@ export function RegisterForm() {
 
   const { mutate: register, isPending, error } = useApiQueries.auth.register();
 
+  //TODO: Avisar usuário para verificar e-mail após registro
   const handleSubmit = (values: RegisterDto) => {
     register(values, {
       onSuccess: () => {

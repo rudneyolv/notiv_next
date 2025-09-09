@@ -45,8 +45,6 @@ export default function PostForm({ postData, onSubmit, isPending, error }: PostF
     },
   });
 
-  console.log(error);
-
   return (
     <div className={PostFormContainerStyles()}>
       <Form {...form}>
@@ -103,7 +101,6 @@ export default function PostForm({ postData, onSubmit, isPending, error }: PostF
             )}
           />
 
-          {/* TODO: Checar como exibir a imagem em um caso onde o post já vem com uma image url */}
           <FormField
             control={form.control}
             name="image"

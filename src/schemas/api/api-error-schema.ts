@@ -4,7 +4,7 @@
 import { z } from "zod";
 
 export const apiErrorSchema = z.object({
-  statusCode: z.number(),
+  statusCode: z.number().optional(),
   error: z.string(),
   messages: z.array(z.string()).default([]),
 });

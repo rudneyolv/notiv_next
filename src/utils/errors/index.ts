@@ -1,17 +1,17 @@
 /** @format */
 
 import {
-  createFallbackApiError,
+  createApiError,
   isApiError,
   parseApiError,
   serializeApiError,
-  throwApiError,
+  handleApiError,
 } from "./api-errors";
 
 export const errorsUtils = {
   isApiError,
   serializeApiError,
   parseApiError,
-  createFallbackApiError,
-  throwApiError,
+  createApiError,
+  handleApiError,
 };

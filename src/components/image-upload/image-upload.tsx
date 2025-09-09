@@ -42,7 +42,6 @@ const getMessages = (maxSizeInKb: number) => ({
   },
 });
 
-//TODO: Implementar sistema de disabled
 export function ImageUpload({ onChange, value, maxSizeInKb = 900, disabled }: ImageUploadProps) {
   // maxSizeInKb transformado em bytes
   const IMAGE_UPLOAD_MAX_SIZE = maxSizeInKb * 1024;

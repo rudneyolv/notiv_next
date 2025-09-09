@@ -2,214 +2,134 @@
 "use server";
 
 import { CreatePostDto, Post, UpdatePostDto } from "@/types/posts-types";
-import { env } from "@/constants/env";
 import { RequestInit } from "next/dist/server/web/spec-extension/request";
 import { revalidateTag } from "next/cache";
-import { cookies } from "next/headers";
 import { postsApiCacheTags } from "./posts-cache";
-import { utils } from "@/utils";
 import { uploadsApi } from "../uploads";
+import { apiRequest } from "@/lib/api/api-request";
 
 const delay = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 //------------------ GET ------------------
 export const fetchAllBase = async (initConfig?: RequestInit): Promise<Post[]> => {
-  try {
-    const cookiesStore = await cookies();
-    await delay();
-
-    const response = await fetch(`${env.API_URL}/posts`, {
+  const result: Post[] = await apiRequest({
+    requireAuth: false,
+    endpoint: "/posts",
+    fallbackMessage: "Erro desconhecido ao buscar os posts",
+    requestConfig: {
       method: "GET",
-      headers: {
-        Cookie: cookiesStore.toString(),
-      },
       ...initConfig,
-    });
+    },
+  });
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw result;
-    }
-
-    return result as Post[];
-  } catch (error: unknown) {
-    throw utils.errors.throwApiError({
-      error,
-      fallbackMessage: "Erro desconhecido ao buscar posts",
-    });
-  }
+  return result;
 };
 
 export const fetchAllMeBase = async (initConfig?: RequestInit): Promise<Post[]> => {
-  try {
-    await delay();
-    const cookiesStore = await cookies();
-
-    const response = await fetch(`${env.API_URL}/posts/me`, {
+  const result: Post[] = await apiRequest({
+    requireAuth: true,
+    endpoint: "/posts/me",
+    fallbackMessage: "Erro desconhecido ao buscar seus posts",
+    requestConfig: {
       method: "GET",
-      headers: {
-        Cookie: cookiesStore.toString(),
-      },
       ...initConfig,
-    });
+    },
+  });
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw result;
-    }
-
-    return result as Post[];
-  } catch (error: unknown) {
-    throw utils.errors.throwApiError({
-      error,
-      fallbackMessage: "Erro desconhecido ao buscar seus posts",
-    });
-  }
+  return result;
 };
 
 export const fetchBySlugBase = async (data: {
   initConfig?: RequestInit;
   slug: string;
 }): Promise<Post> => {
-  try {
-    const { initConfig, slug } = data;
+  const { initConfig, slug } = data;
 
-    await delay();
-
-    const response = await fetch(`${env.API_URL}/posts/slug/${slug}`, {
+  const result: Post = await apiRequest({
+    endpoint: `/posts/slug/${slug}`,
+    fallbackMessage: "Erro desconhecido ao buscar post",
+    requestConfig: {
       method: "GET",
       ...initConfig,
-    });
+    },
+  });
 
-    const result = await response.json();
-
-    if (!response.ok) throw result;
-
-    return result as Post;
-  } catch (error: unknown) {
-    throw utils.errors.throwApiError({
-      error,
-      fallbackMessage: "Erro desconhecido ao buscar post",
-    });
-  }
+  return result;
 };
 
 //------------------ POST ------------------
 export const createNewPost = async (data: CreatePostDto): Promise<Post> => {
-  try {
-    const cookiesStore = await cookies();
+  await delay();
 
-    let imageUrl: string | undefined;
+  let imageUrl: string | undefined;
 
-    if (data.image instanceof File) {
-      const formData = new FormData();
-      formData.append("file", data.image);
-      imageUrl = await uploadsApi.uploadFile(formData);
-    }
+  if (data.image instanceof File) {
+    const formData = new FormData();
+    formData.append("file", data.image);
+    imageUrl = await uploadsApi.uploadFile(formData);
+  }
 
-    const response = await fetch(`${env.API_URL}/posts`, {
-      method: "POST",
+  const result: Post = await apiRequest({
+    endpoint: `/posts`,
+    fallbackMessage: "Erro desconhecido ao criar post",
+    requestConfig: {
       body: JSON.stringify({ ...data, imageUrl: imageUrl ?? null }),
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Cookie: cookiesStore.toString(),
       },
-    });
+    },
+  });
 
-    await delay();
+  revalidateTag(postsApiCacheTags.createPost());
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw result;
-    }
-
-    revalidateTag(postsApiCacheTags.createPost());
-
-    return result as Post;
-  } catch (error: unknown) {
-    throw utils.errors.throwApiError({
-      error,
-      fallbackMessage: "Erro desconhecido ao criar post",
-    });
-  }
+  return result;
 };
 
 //------------------ PATCH ------------------
 export const editPost = async (data: UpdatePostDto): Promise<Post> => {
-  try {
-    const cookiesStore = await cookies();
-    const { id: postId, image, ...payloadData } = data;
-    let imageUrl: string | undefined = data.imageUrl ?? undefined;
+  const { id: postId, image, ...payloadData } = data;
+  let imageUrl: string | undefined = data.imageUrl ?? undefined;
 
-    if (image instanceof File) {
-      const formData = new FormData();
-      formData.append("file", image);
-      imageUrl = await uploadsApi.uploadFile(formData);
-    }
+  await delay();
 
-    const response = await fetch(`${env.API_URL}/posts/${postId}`, {
-      method: "PATCH",
+  if (image instanceof File) {
+    const formData = new FormData();
+    formData.append("file", image);
+    imageUrl = await uploadsApi.uploadFile(formData); // TODO: Checar se n quebra
+  }
+
+  const result: Post = await apiRequest({
+    endpoint: `/posts/${postId}`,
+    fallbackMessage: "Erro desconhecido ao editar post",
+    requestConfig: {
       body: JSON.stringify({ ...payloadData, imageUrl }),
+      method: "PATCH",
       headers: {
-        Cookie: cookiesStore.toString(),
         "Content-Type": "application/json",
       },
-    });
+    },
+  });
 
-    await delay();
+  revalidateTag(`post-${result.slug}`);
+  revalidateTag("edit-post");
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw result;
-    }
-
-    const post: Post = result;
-
-    revalidateTag(`post-${post.slug}`);
-    revalidateTag("edit-post");
-
-    return post;
-  } catch (error: unknown) {
-    throw utils.errors.throwApiError({
-      error,
-      fallbackMessage: "Erro desconhecido ao editar post",
-    });
-  }
+  return result;
 };
 
 export const deletePost = async (postid: string | number): Promise<Post> => {
-  try {
-    const cookiesStore = await cookies();
+  await delay();
 
-    const response = await fetch(`${env.API_URL}/posts/soft-delete/${postid}`, {
+  const result: Post = await apiRequest({
+    endpoint: `/posts/soft-delete/${postid}`,
+    fallbackMessage: "Erro desconhecido ao editar post",
+    requestConfig: {
       method: "PATCH",
-      headers: {
-        Cookie: cookiesStore.toString(),
-      },
-    });
+    },
+  });
 
-    await delay();
+  revalidateTag("delete-post");
+  revalidateTag(`post-${result.slug}`);
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw result;
-    }
-
-    const post: Post = result;
-
-    revalidateTag("delete-post");
-    revalidateTag(`post-${post.slug}`);
-
-    return post;
-  } catch (error: unknown) {
-    throw utils.errors.throwApiError({
-      error,
-      fallbackMessage: "Erro desconhecido ao excluir post",
-    });
-  }
+  return result;
 };

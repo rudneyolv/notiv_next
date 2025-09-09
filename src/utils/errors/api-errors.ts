@@ -8,23 +8,35 @@ interface ThrowApiErrorProps {
   fallbackMessage: string;
 }
 
-export const createFallbackApiError = (message: string = "Erro desconhecido"): ApiError => ({
-  messages: [message],
-  error: "Unknown",
-  statusCode: 500,
-});
+export const createApiError = (data: {
+  message: string;
+  error?: string;
+  statusCode?: number;
+}): ApiError => {
+  const { message, error = "Erro desconhecido", statusCode } = data;
+
+  return {
+    messages: [message],
+    error: error,
+    statusCode: statusCode,
+  };
+};
 
 export const isApiError = (error: unknown): error is ApiError => {
   if (typeof error !== "object" || error === null) return false;
 
   const e = error as Record<string, unknown>;
 
-  return (
+  // Verifica as propriedades obrigatórias
+  const hasRequiredFields =
     Array.isArray(e.messages) &&
     e.messages.every((m) => typeof m === "string") &&
-    typeof e.error === "string" &&
-    typeof e.statusCode === "number"
-  );
+    typeof e.error === "string";
+
+  // Ela é válida se NÃO EXISTIR (undefined) ou se FOR UM NÚMERO.
+  const hasValidStatusCode = e.statusCode === undefined || typeof e.statusCode === "number";
+
+  return hasRequiredFields && hasValidStatusCode;
 };
 
 export function parseApiError(error: unknown): ApiError {
@@ -35,7 +47,7 @@ export function parseApiError(error: unknown): ApiError {
     error instanceof Error ? error.message : typeof error === "string" ? error : null;
 
   if (!errorToParse) {
-    return createFallbackApiError("Erro desconhecido.");
+    return createApiError({ message: "Erro desconhecido." });
   }
 
   try {
@@ -43,9 +55,9 @@ export function parseApiError(error: unknown): ApiError {
     return apiErrorSchema.parse(parsed);
   } catch (parseError) {
     if (parseError instanceof ZodError) {
-      return createFallbackApiError("Formato de erro inválido.");
+      return createApiError({ message: "Formato de erro inválido." });
     } else {
-      return createFallbackApiError("Erro inesperado ao tratar o erro.");
+      return createApiError({ message: "Erro inesperado ao tratar o erro." });
     }
   }
 }
@@ -54,13 +66,17 @@ export function serializeApiError(error: ApiError) {
   return JSON.stringify(error);
 }
 
-export function throwApiError(data: ThrowApiErrorProps) {
+export function handleApiError(data: ThrowApiErrorProps) {
   const { error, fallbackMessage } = data;
+  let finalError: ApiError;
 
   if (isApiError(error)) {
-    throw serializeApiError(error);
+    finalError = error;
+  } else if (error instanceof Error) {
+    finalError = createApiError({ message: error.message });
   } else {
-    const fallbackError = createFallbackApiError(fallbackMessage);
-    throw serializeApiError(fallbackError);
+    finalError = createApiError({ message: fallbackMessage });
   }
+
+  throw serializeApiError(finalError);
 }

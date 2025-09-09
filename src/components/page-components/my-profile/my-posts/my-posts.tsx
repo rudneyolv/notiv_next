@@ -16,7 +16,6 @@ export const MyPosts = () => {
 
   if (error) {
     const parsedError = utils.errors.parseApiError(error);
-
     return <ApiErrorMessages messages={parsedError.messages} />;
   }
 

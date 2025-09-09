@@ -20,7 +20,7 @@ const useValidateSession = () => {
 const useLogin = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<User, ApiError, LoginDto>({
+  return useMutation<void, ApiError, LoginDto>({
     mutationFn: api.auth.login,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["logged"] });
@@ -34,8 +34,20 @@ const useRegister = () => {
   });
 };
 
+const useLogout = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, ApiError, null>({
+    mutationFn: api.auth.logout,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["logged"] });
+    },
+  });
+};
+
 export const useAuth = {
   validateSession: useValidateSession,
   login: useLogin,
   register: useRegister,
+  logout: useLogout,
 };

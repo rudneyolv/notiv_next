@@ -46,6 +46,7 @@ export const fetchBySlugBase = async (data: {
   const { initConfig, slug } = data;
 
   const result: Post = await apiRequest({
+    requireAuth: false,
     endpoint: `/posts/slug/${slug}`,
     fallbackMessage: "Erro desconhecido ao buscar post",
     requestConfig: {

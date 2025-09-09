@@ -1,67 +1,67 @@
 /** @format */
 
-import { type NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse, URLPattern } from "next/server";
 import { refreshSession } from "./lib/supabase/refresh-session";
 
-// Suas constantes e definições de rotas (mantidas exatamente como estavam)
 const publicRoutes = [
   { path: "/login", whenAuthenticated: "redirect" },
   { path: "/register", whenAuthenticated: "redirect" },
   { path: "/", whenAuthenticated: "next" },
+  { path: "/post/:slug", whenAuthenticated: "next" },
 ] as const;
 
 const REDIRECT_WHEN_NOT_AUTHENTICATED = "/login";
 const REDIRECT_WHEN_AUTHENTICATED = "/my-profile/posts";
 
+function findPublicRouteByPath(pathname: string) {
+  for (const route of publicRoutes) {
+    // Cria padrão baseado no path (ex: /post/:slug)
+    const urlPattern = new URLPattern({ pathname: route.path });
+
+    // Testa se o pathname bate com o padrão
+    if (urlPattern.test({ pathname })) {
+      // Retorna a rota correspondente
+      return route;
+    }
+  }
+
+  // Não encontrou -> rota privada
+  return null;
+}
+
 export async function middleware(request: NextRequest) {
-  // PASSO 1: Iniciar o processo de atualização de sessão do Supabase.
-  // Criamos uma resposta base que será usada para passar os cookies atualizados +.
-
-  // A variável `user` agora é nossa única fonte de verdade sobre a autenticação.
   const { user, supabaseResponse } = await refreshSession(request);
-
-  // PASSO 2: lógica de roteamento customizada.
   const path = request.nextUrl.pathname;
-  const publicRoute = publicRoutes.find((route) => route.path === path);
 
-  // Regra 1: Usuário NÃO está logado e tenta acessar uma rota privada.
-  if (!user && !publicRoute) {
+  // 2. VERIFICA SE A ROTA ATUAL É PÚBLICA
+  const isPublicRoute = findPublicRouteByPath(path);
+
+  // Regra 1: A rota é PRIVADA (não encontrada na lista pública) e o usuário NÃO está logado.
+  if (!isPublicRoute && !user) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED;
 
-    // IMPORTANTE: Retornamos um redirect diretamente. O fluxo do middleware para aqui.
+    // Adiciona a URL original para redirecionar de volta após o login
+    redirectUrl.searchParams.set("redirectedFrom", path);
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Regra 2: Usuário ESTÁ logado e tenta acessar uma rota que só pode ser vista deslogado (ex: /login).
-  if (user && publicRoute && publicRoute.whenAuthenticated === "redirect") {
+  // Regra 2: A rota é PÚBLICA, o usuário ESTÁ logado, e a rota deve redirecionar quando autenticado.
+  if (user && isPublicRoute && isPublicRoute.whenAuthenticated === "redirect") {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = REDIRECT_WHEN_AUTHENTICATED;
-
-    // IMPORTANTE: Retornamos um redirect diretamente. O fluxo do middleware para aqui.
     return NextResponse.redirect(redirectUrl);
   }
 
-  // PASSO 4: Se nenhum redirecionamento foi feito, retornar a resposta do Supabase.
-  // É VITAL retornar este objeto `response`, pois ele contém os cookies de sessão
-  // atualizados que o `getUser()` pode ter definido. Retornar um novo `NextResponse.next()`
-  // aqui descartaria a atualização da sessão.
+  // Se nenhuma das regras de redirecionamento acima for acionada, o acesso é permitido.
+  // Isso cobre os seguintes casos:
+  // - Usuário logado em rota privada.
+  // - Usuário logado em rota pública que não redireciona.
+  // - Usuário deslogado em rota pública.
+  // Retornamos a resposta do Supabase para garantir que os cookies da sessão sejam atualizados.
   return supabaseResponse;
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
-     */
-    // default matcher
-    // "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
-
-    // supabase matcher
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
 };

@@ -19,7 +19,6 @@ import { utils } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -40,8 +39,7 @@ export function RegisterForm() {
   const handleSubmit = (values: RegisterDto) => {
     register(values, {
       onSuccess: () => {
-        toast.success("Registro efetuado com sucesso.");
-        router.push("/login");
+        router.push("/confirm-email");
       },
     });
   };

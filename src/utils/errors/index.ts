@@ -6,6 +6,7 @@ import {
   parseApiError,
   serializeApiError,
   handleApiError,
+  formatSupabaseError,
 } from "./api-errors";
 
 export const errorsUtils = {
@@ -14,4 +15,5 @@ export const errorsUtils = {
   parseApiError,
   createApiError,
   handleApiError,
+  formatSupabaseError,
 };

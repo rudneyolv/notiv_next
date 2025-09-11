@@ -1,6 +1,7 @@
 /** @format */
 
 import { ApiError, apiErrorSchema } from "@/schemas/api/api-error-schema";
+import { AuthError } from "@supabase/supabase-js";
 import { ZodError } from "zod";
 
 interface ThrowApiErrorProps {
@@ -21,6 +22,16 @@ export const createApiError = (data: {
     statusCode: statusCode,
   };
 };
+
+export function formatSupabaseError(error: AuthError) {
+  if (!error) return null;
+
+  return createApiError({
+    message: error.message ?? "Erro desconhecido no Supabase",
+    statusCode: error.status ?? 500,
+    error: error.code ?? "supabase_error",
+  });
+}
 
 export const isApiError = (error: unknown): error is ApiError => {
   if (typeof error !== "object" || error === null) return false;

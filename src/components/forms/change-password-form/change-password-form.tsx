@@ -1,0 +1,99 @@
+/** @format */
+"use client";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import InputPassword from "@/components/ui/input-password";
+import { ChangePasswordDto } from "@/schemas/auth/change-password-schema";
+import { ChangePasswordSchema } from "@/schemas/auth/change-password-schema";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { FormContainerStyles, FormStyles } from "../default-styles";
+import { Button } from "@/components/ui/button";
+import { useApiQueries } from "@/hooks/queries";
+import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
+import { utils } from "@/utils";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+export function ChangePasswordForm() {
+  const router = useRouter();
+
+  const form = useForm<ChangePasswordDto>({
+    resolver: zodResolver(ChangePasswordSchema),
+    mode: "onTouched",
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+    },
+  });
+
+  const { mutate: changePassword, isPending, error } = useApiQueries.auth.changePassword();
+
+  const onSubmit = (data: ChangePasswordDto) => {
+    changePassword(data, {
+      onSuccess: () => {
+        router.push("/login");
+        toast.success("Senha alterada com sucesso. Por favor, efetue login novamente!");
+      },
+    });
+  };
+
+  return (
+    <div className={FormContainerStyles()}>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className={FormStyles()}>
+          <FormField
+            name="currentPassword"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Insira sua senha atual</FormLabel>
+                <FormControl>
+                  <InputPassword
+                    disabled={isPending}
+                    placeholder="Insira sua senha atual"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            name="newPassword"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Insira sua nova senha</FormLabel>
+                <FormControl>
+                  <InputPassword
+                    disabled={isPending}
+                    placeholder="Insira sua nova senha"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {error && <ApiErrorMessages messages={utils.errors.parseApiError(error).messages} />}
+
+          <Button isLoading={isPending} className="w-full">
+            Confirmar alteração
+          </Button>
+        </form>
+      </Form>
+    </div>
+  );
+}

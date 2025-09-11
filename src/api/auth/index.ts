@@ -1,10 +1,11 @@
 /** @format */
 
-import { authLogin, authLogout, authRegister, validateSession } from "./auth-api";
+import { changePassword, login, logout, register, validateSession } from "./auth-api";
 
 export const authApi = {
-  register: authRegister,
-  login: authLogin,
+  register: register,
+  login: login,
   validateSession: validateSession,
-  logout: authLogout,
+  logout: logout,
+  changePassword: changePassword,
 };

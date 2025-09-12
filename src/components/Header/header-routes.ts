@@ -1,39 +1,8 @@
 /** @format */
 
 // header-routes.ts
-import {
-  CircleUserRound,
-  Home,
-  LogIn,
-  LogOut,
-  LucideIcon,
-  Pen,
-  StickyNote,
-  UserPlus,
-} from "lucide-react";
-
-export type DirectRoute = {
-  href: string;
-  Icon: LucideIcon;
-  label: string;
-  type: "direct";
-};
-
-export type ListRoute = {
-  href: string;
-  Icon: LucideIcon;
-  label: string;
-  type: "list";
-  children: ListChildRoute[];
-};
-
-export type ListChildRoute = {
-  href: string;
-  Icon: LucideIcon;
-  label: string;
-};
-
-export type Route = DirectRoute | ListRoute;
+import { Route } from "@/types/routes-types";
+import { CircleUserRound, Home, LogIn, LogOut, Pen, StickyNote, UserPlus } from "lucide-react";
 
 export const defaultRoutes: Route[] = [
   {

@@ -69,7 +69,7 @@ export function HeaderUI({ isLogged }: { isLogged: boolean }) {
                   <NavigationMenuContent>
                     <ul className="grid w-[200px]">
                       {route.children.map(({ href, label, Icon }) => {
-                        const isActive = pathname === href;
+                        const isActive = pathname.startsWith(href);
 
                         return (
                           <li key={href}>

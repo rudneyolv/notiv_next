@@ -1,11 +1,12 @@
 /** @format */
 
-import { changePassword, login, logout, register, validateSession } from "./auth-api";
+import { updatePassword, login, logout, register, validateSession, updateEmail } from "./auth-api";
 
 export const authApi = {
   register: register,
   login: login,
   validateSession: validateSession,
   logout: logout,
-  changePassword: changePassword,
+  updatePassword: updatePassword,
+  updateEmail: updateEmail,
 };

@@ -1,7 +1,7 @@
 /** @format */
 
-import { Text } from "@/components/text/text";
+import { UpdateEmailForm } from "@/components/forms/update-email-form/update-email-form";
 
 export default function UpdateEmailPage() {
-  return <Text>Alterar email</Text>;
+  return <UpdateEmailForm />;
 }

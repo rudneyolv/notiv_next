@@ -6,7 +6,8 @@ import { RegisterDto } from "@/schemas/auth/register-schema";
 import { ApiError } from "@/schemas/api/api-error-schema";
 import { User } from "@/types/users-types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChangePasswordDto } from "@/schemas/auth/change-password-schema";
+import { UpdatePasswordDto } from "@/schemas/auth/update-password-schema";
+import { UpdateEmailDto } from "@/schemas/auth/update-email-schema";
 
 const useValidateSession = () => {
   return useQuery({
@@ -46,14 +47,20 @@ const useLogout = () => {
   });
 };
 
-const useChangePassword = () => {
+const useUpdatePassword = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<void, ApiError, ChangePasswordDto>({
-    mutationFn: api.auth.changePassword,
+  return useMutation<void, ApiError, UpdatePasswordDto>({
+    mutationFn: api.auth.updatePassword,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["logged"] });
     },
+  });
+};
+
+const useUpdateEmail = () => {
+  return useMutation<void, ApiError, UpdateEmailDto>({
+    mutationFn: api.auth.updateEmail,
   });
 };
 
@@ -62,5 +69,6 @@ export const useAuth = {
   login: useLogin,
   register: useRegister,
   logout: useLogout,
-  changePassword: useChangePassword,
+  updatePassword: useUpdatePassword,
+  updateEmail: useUpdateEmail,
 };

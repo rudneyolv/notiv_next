@@ -10,8 +10,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import InputPassword from "@/components/ui/input-password";
-import { ChangePasswordDto } from "@/schemas/auth/change-password-schema";
-import { ChangePasswordSchema } from "@/schemas/auth/change-password-schema";
+import { UpdatePasswordDto } from "@/schemas/auth/update-password-schema";
+import { UpdatePasswordSchema } from "@/schemas/auth/update-password-schema";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -26,8 +26,8 @@ import { toast } from "sonner";
 export function UpdatePasswordForm() {
   const router = useRouter();
 
-  const form = useForm<ChangePasswordDto>({
-    resolver: zodResolver(ChangePasswordSchema),
+  const form = useForm<UpdatePasswordDto>({
+    resolver: zodResolver(UpdatePasswordSchema),
     mode: "onTouched",
     defaultValues: {
       currentPassword: "",
@@ -35,9 +35,9 @@ export function UpdatePasswordForm() {
     },
   });
 
-  const { mutate: changePassword, isPending, error } = useApiQueries.auth.changePassword();
+  const { mutate: changePassword, isPending, error } = useApiQueries.auth.updatePassword();
 
-  const onSubmit = (data: ChangePasswordDto) => {
+  const onSubmit = (data: UpdatePasswordDto) => {
     changePassword(data, {
       onSuccess: () => {
         router.push("/login");

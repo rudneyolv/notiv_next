@@ -1,6 +1,6 @@
 /** @format */
 
-import EditPost from "@/components/page-components/my-profile/edit-post/edit-post";
+import EditPost from "@/components/page-components/my-profile/posts/edit-post/edit-post";
 
 interface EditPostPageParams {
   params: Promise<{ slug: string }>;

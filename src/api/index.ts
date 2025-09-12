@@ -2,7 +2,7 @@
 
 import { authApi } from "./auth";
 import { postsApi } from "./posts";
-import { usersApi } from "./users/users-api";
+import { usersApi } from "./users";
 
 export const api = {
   auth: authApi,

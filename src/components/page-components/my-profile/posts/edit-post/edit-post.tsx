@@ -14,7 +14,6 @@ import { ApiErrorMessages } from "@/components/api-error-messages/api-error-mess
 
 export default function EditPost({ slug }: { slug: string }) {
   let parsedMutateError: ApiError | null = null;
-
   const router = useRouter();
 
   const { data: postData, isLoading, error: fetchError } = useApiQueries.posts.fetchBySlug(slug);
@@ -63,17 +62,19 @@ export default function EditPost({ slug }: { slug: string }) {
     );
 
   return (
-    <PostForm
-      postData={{
-        title: postData.title,
-        summary: postData.summary,
-        image: postData.imageUrl,
-        published: postData.published,
-        content: postData.content,
-      }}
-      isPending={isPending}
-      error={parsedMutateError}
-      onSubmit={onSubmit}
-    />
+    <div className="mt-8">
+      <PostForm
+        postData={{
+          title: postData.title,
+          summary: postData.summary,
+          image: postData.imageUrl,
+          published: postData.published,
+          content: postData.content,
+        }}
+        isPending={isPending}
+        error={parsedMutateError}
+        onSubmit={onSubmit}
+      />
+    </div>
   );
 }

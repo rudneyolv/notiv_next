@@ -25,6 +25,7 @@ import { PostFormContainerStyles, PostFormStyles } from "./post-form-styles";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ApiError } from "@/schemas/api/api-error-schema";
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
+import { FormContainerStyles, FormStyles } from "../default-styles";
 
 interface PostFormProps {
   postData?: PostFormData;
@@ -46,9 +47,9 @@ export default function PostForm({ postData, onSubmit, isPending, error }: PostF
   });
 
   return (
-    <div className={PostFormContainerStyles()}>
+    <div className={FormContainerStyles()}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className={PostFormStyles()}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className={FormStyles()}>
           <FormField
             control={form.control}
             name="title"

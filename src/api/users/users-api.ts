@@ -1,21 +1,34 @@
 /** @format */
+"use server";
 
-// import { env } from "@/constants/env";
-// import { RegisterFormType } from "@/schemas/admin/register-schema";
+import { apiRequest } from "@/lib/api/api-request";
+import { UpdateProfileDto } from "@/schemas/users/update-profile-schema";
+import { User } from "@/types/users-types";
 
-// const create = async (data: RegisterFormType) => {
-//   const response = await fetch(`${env.API_URL}/users`, {
-//     method: "POST",
-//     body: JSON.stringify(data),
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
+export const getCurrentUser = async () => {
+  const result: User = await apiRequest({
+    endpoint: "/users/me",
+    requestConfig: {
+      method: "GET",
+    },
+    fallbackMessage: "Erro ao buscar o seu perfil",
+  });
 
-//   if (!response.ok) {
-//     const error = await response.json();
-//     throw new Error(error.message || "Erro desconhecido ao registrar");
-//   }
-// };
+  return result;
+};
 
-export const usersApi = {};
+export const updateProfile = async (updateProfileDto: UpdateProfileDto) => {
+  const result: User = await apiRequest({
+    endpoint: "/users/me",
+    requestConfig: {
+      method: "PATCH",
+      body: JSON.stringify(updateProfileDto),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+    fallbackMessage: "Erro ao editar perfil",
+  });
+
+  return result;
+};

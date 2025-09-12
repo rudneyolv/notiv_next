@@ -29,5 +29,9 @@ export default function NewPost() {
     });
   };
 
-  return <PostForm isPending={isPending} error={parsedError} onSubmit={onSubmit} />;
+  return (
+    <div className="mt-8">
+      <PostForm isPending={isPending} error={parsedError} onSubmit={onSubmit} />
+    </div>
+  );
 }

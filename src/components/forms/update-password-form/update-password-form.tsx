@@ -9,7 +9,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import InputPassword from "@/components/ui/input-password";
 import { ChangePasswordDto } from "@/schemas/auth/change-password-schema";
 import { ChangePasswordSchema } from "@/schemas/auth/change-password-schema";
@@ -24,7 +23,7 @@ import { utils } from "@/utils";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-export function ChangePasswordForm() {
+export function UpdatePasswordForm() {
   const router = useRouter();
 
   const form = useForm<ChangePasswordDto>({
@@ -56,7 +55,7 @@ export function ChangePasswordForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Insira sua senha atual</FormLabel>
+                <FormLabel>Senha atual</FormLabel>
                 <FormControl>
                   <InputPassword
                     disabled={isPending}
@@ -74,7 +73,7 @@ export function ChangePasswordForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Insira sua nova senha</FormLabel>
+                <FormLabel>Nova senha</FormLabel>
                 <FormControl>
                   <InputPassword
                     disabled={isPending}

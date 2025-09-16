@@ -2,6 +2,7 @@
 "use client";
 
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
+import { Text } from "@/components/text/text";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import InputPassword from "@/components/ui/input-password";
+import { env } from "@/constants/env";
 import { useApiQueries } from "@/hooks/queries";
 import { RegisterDto, RegisterSchema } from "@/schemas/auth/register-schema";
 import { utils } from "@/utils";
@@ -97,6 +99,10 @@ export function RegisterForm() {
         />
 
         {error && <ApiErrorMessages messages={utils.errors.parseApiError(error).messages} />}
+
+        {env.NEXT_PUBLIC_ALLOW_NEW_USERS === "0" && (
+          <Text className="text-destructive">O cadastro de novos usuários está desabilitado</Text>
+        )}
 
         <Button className="w-full" type="submit" isLoading={isPending}>
           Registrar-se

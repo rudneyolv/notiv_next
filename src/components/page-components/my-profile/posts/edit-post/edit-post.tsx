@@ -26,8 +26,6 @@ export default function EditPost({ slug }: { slug: string }) {
   const onSubmit = (editPostData: PostFormData) => {
     if (!postData) return;
 
-    //TODO: Checar melhorias na parte de manter imageUrl
-
     // ID passado para saber qual post atualizar
     // imageUrl existente para manter a imagem atual caso o usuário não envie uma nova image(File)
     const updatePostDto = { ...editPostData, id: postData.id, imageUrl: postData.imageUrl };

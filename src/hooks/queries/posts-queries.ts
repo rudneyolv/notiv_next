@@ -7,8 +7,8 @@ const useFetchAllme = () => {
   return useQuery({
     queryFn: api.posts.nonCached.fetchAllMe,
     queryKey: ["my-posts"],
-    gcTime: 100000,
-    staleTime: 100000,
+    staleTime: 1000 * 60 * 60 * 24, // 1 dia
+    gcTime: 1000 * 60 * 60 * 24, // 1 dia
   });
 };
 
@@ -16,8 +16,8 @@ const useFetchPostBySlug = (slug: string) => {
   return useQuery({
     queryFn: () => api.posts.nonCached.fetchBySlug(slug),
     queryKey: ["post", slug],
-    gcTime: 5000,
-    staleTime: 5000,
+    staleTime: 1000 * 60 * 10, // 10 minutos
+    gcTime: 1000 * 60 * 10, // 10 minutos
   });
 };
 

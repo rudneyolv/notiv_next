@@ -97,7 +97,7 @@ export const editPost = async (data: UpdatePostDto): Promise<Post> => {
   if (image instanceof File) {
     const formData = new FormData();
     formData.append("file", image);
-    imageUrl = await uploadsApi.uploadFile(formData); // TODO: Checar se n quebra
+    imageUrl = await uploadsApi.uploadFile(formData);
   }
 
   const result: Post = await apiRequest({

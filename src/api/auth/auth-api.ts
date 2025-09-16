@@ -11,6 +11,7 @@ import { RegisterDto } from "@/schemas/auth/register-schema";
 import { User } from "@/types/users-types";
 import { utils } from "@/utils";
 
+//TODO: Melhorar validação de sessão
 export const validateSession = async (): Promise<{ logged: boolean }> => {
   try {
     const supabase = await createSupabaseServer();

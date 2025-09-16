@@ -7,8 +7,8 @@ const useGetCurrentUser = () => {
   return useQuery({
     queryFn: api.users.current.get,
     queryKey: ["current-user"],
-    gcTime: 100000,
-    staleTime: 100000,
+    staleTime: 1000 * 60 * 10, // 10 minutos
+    gcTime: 1000 * 60 * 10, // 10 minutos
   });
 };
 

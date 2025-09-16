@@ -28,9 +28,10 @@ export default async function PostPage({ params }: PostPageParams) {
       <div className=" w-full max-w-5xl flex flex-col items-center gap-2 p-8">
         <Suspense fallback={<Text className="font-bold animate-pulse uppercase">Loading</Text>}>
           <PostDetails slug={slug} />
+
           <Link
             href="#"
-            className="text-zinc-400 text-center font-bold text-md flex flex-row gap-2 justify-center items-center hover:text-zinc-200 transition-colors"
+            className="mt-8 text-zinc-400 text-center font-bold text-md flex flex-row gap-2 justify-center items-center hover:text-zinc-200 transition-colors"
           >
             Voltar ao topo <ArrowUpCircle className="size-5" />
           </Link>

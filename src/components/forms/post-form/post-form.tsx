@@ -21,7 +21,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { ImageUpload } from "@/components/image-upload/image-upload";
 import { ClientMarkdownEditor } from "@/components/markdown-editor/client-markdown-editor";
 import { PostFormData, PostFormSchema } from "@/schemas/posts/post-form-schema";
-import { PostFormContainerStyles, PostFormStyles } from "./post-form-styles";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ApiError } from "@/schemas/api/api-error-schema";
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";

@@ -8,7 +8,6 @@ import { Text } from "@/components/text/text";
 import { Post as PostType } from "@/types/posts-types";
 import { formatDatetime, formatRelativeDateToNow } from "@/utils/format-datetime";
 import { utils } from "@/utils";
-import { CircleDivide } from "lucide-react";
 import { images } from "@/constants/images-constants";
 
 interface PostDetailsProps {

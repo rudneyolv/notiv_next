@@ -20,8 +20,8 @@ import { utils } from "@/utils";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Text } from "@/components/text/text";
 import { UpdateEmailDto, UpdateEmailSchema } from "@/schemas/auth/update-email-schema";
+import { Text } from "@/components/text/text";
 
 export function UpdateEmailForm() {
   const form = useForm<UpdateEmailDto>({

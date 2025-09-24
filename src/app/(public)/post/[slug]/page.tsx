@@ -1,24 +1,38 @@
 /** @format */
 
 import { Suspense } from "react";
-import { Text } from "@/components/text/text";
 import Link from "next/link";
 import { ArrowUpCircle, Loader2 } from "lucide-react";
 import { PostDetails } from "@/components/page-components/post/post-details/post-details";
+import { Metadata } from "next";
+import { api } from "@/api";
+import { utils } from "@/utils";
+import { env } from "@/constants/env";
 
 interface PostPageParams {
   params: Promise<{ slug: string }>;
 }
 
-// export async function generateMetadata({ params }: PostPageParams): Promise<Metadata> {
-//   const { slug } = await params;
-//   const post = await postsRepositoryInstance.fetchBySlug(slug);
+export async function generateMetadata({ params }: PostPageParams): Promise<Metadata> {
+  const { slug } = await params;
+  const result = await api.posts.cached.fetchBySlug(slug);
 
-//   return {
-//     title: post.title,
-//     description: post.excerpt,
-//   };
-// }
+  if (utils.errors.isApiError(result)) {
+    return {
+      title: "Post não encontrado",
+      description: "Este post não existe ou foi removido da Notiv.",
+    };
+  }
+
+  return {
+    title: result.title,
+    description: result.summary,
+
+    alternates: {
+      canonical: `${env.NEXT_PUBLIC_FRONTEND_URL}/${slug}`,
+    },
+  };
+}
 
 export default async function PostPage({ params }: PostPageParams) {
   const { slug } = await params;

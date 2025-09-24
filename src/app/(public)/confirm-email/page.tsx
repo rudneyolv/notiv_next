@@ -2,6 +2,18 @@
 
 import { Heading } from "@/components/heading/heading";
 import { Text } from "@/components/text/text";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Login",
+  description: "Acesse sua conta na Notiv.",
+  robots: {
+    follow: false,
+  },
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/login`,
+  },
+};
 
 export default function LoginPage() {
   return (

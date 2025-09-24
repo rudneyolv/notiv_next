@@ -7,6 +7,20 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MyPosts } from "@/components/page-components/my-profile/posts/my-posts/my-posts";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Meus posts",
+  description: "Gerencie seus posts na Notiv.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/my-profile/posts`,
+  },
+};
+
 export default function AdminPosts() {
   return (
     <div className="min-h-screen p-8 flex flex-col items-center">

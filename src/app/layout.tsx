@@ -10,10 +10,10 @@ import { Header } from "@/components/header/header";
 
 export const metadata: Metadata = {
   title: {
-    default: "The Notiv",
+    default: "Notiv",
     template: "%s | Notiv ",
   },
-  description: "Descrição padrão do Notiv",
+  description: "Um blog daora",
 };
 
 const sofiaSans = Sofia_Sans({

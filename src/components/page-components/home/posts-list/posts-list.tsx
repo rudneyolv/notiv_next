@@ -24,7 +24,11 @@ export const PostsList = async () => {
       <div className="grid md:grid-cols-2 gap-4">
         {posts.map((post) => (
           <PostCard.Root variant="col" key={post.id} href={`/post/${post.slug}`} className="">
-            <PostCard.Image src={post.imageUrl || images.fallbacks.post.banner} alt={post.title} />
+            <PostCard.Image
+              priority={true}
+              src={post.imageUrl || images.fallbacks.post.banner}
+              alt={post.title}
+            />
             <PostCard.Content>
               <div>
                 <PostCard.Text className="sm:text-xl">{post.author.name}</PostCard.Text>

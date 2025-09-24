@@ -5,23 +5,19 @@ import { ApiErrorMessages } from "@/components/api-error-messages/api-error-mess
 import { PostCard } from "@/components/blocks/post-card";
 import { Text } from "@/components/text/text";
 import { images } from "@/constants/images-constants";
-import { Post as PostType } from "@/types/posts-types";
-import { formatDatetime, formatRelativeDateToNow } from "@/utils/format-datetime";
 import { utils } from "@/utils";
+import { formatDatetime, formatRelativeDateToNow } from "@/utils/format-datetime";
 
 export const PostsList = async () => {
-  let posts: PostType[] = [];
+  const result = await api.posts.cached.fetchAll();
 
-  try {
-    posts = await api.posts.cached.fetchAll();
-  } catch (error) {
-    const parsedError = utils.errors.parseApiError(error);
-    return <ApiErrorMessages messages={parsedError.messages} />;
-  }
+  if (utils.errors.isApiError(result)) return <ApiErrorMessages messages={result.messages} />;
 
-  if (posts.length === 0) {
+  if (result.length === 0) {
     return <Text>Nenhum post foi encontrado...</Text>;
   }
+
+  const posts = result;
 
   return (
     <div className="w-full h-full flex flex-col gap-8">

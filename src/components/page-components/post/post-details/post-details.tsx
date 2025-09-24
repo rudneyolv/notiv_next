@@ -5,7 +5,6 @@ import { ApiErrorMessages } from "@/components/api-error-messages/api-error-mess
 import { Markdown } from "@/components/markdown/markdown";
 import { PostCard } from "@/components/blocks/post-card";
 import { Text } from "@/components/text/text";
-import { Post as PostType } from "@/types/posts-types";
 import { formatDatetime, formatRelativeDateToNow } from "@/utils/format-datetime";
 import { utils } from "@/utils";
 import { images } from "@/constants/images-constants";
@@ -14,19 +13,16 @@ interface PostDetailsProps {
   slug: string;
 }
 
-export default async function PostDetails({ slug }: PostDetailsProps) {
-  let post: PostType;
+export async function PostDetails({ slug }: PostDetailsProps) {
+  const result = await api.posts.cached.fetchBySlug(slug);
 
-  try {
-    post = await api.posts.cached.fetchBySlug(slug);
-  } catch (error: unknown) {
-    const parsedError = utils.errors.parseApiError(error);
-    return <ApiErrorMessages messages={parsedError.messages} />;
-  }
+  if (utils.errors.isApiError(result)) return <ApiErrorMessages messages={result.messages} />;
 
-  if (!post) {
+  if (!result) {
     return <Text>Post não encontrado...</Text>;
   }
+
+  const post = result;
 
   return (
     <div className="w-full h-full flex flex-col gap-2">

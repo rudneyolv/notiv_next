@@ -7,21 +7,14 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useApiQueries } from "@/hooks/queries";
-import { ApiError } from "@/schemas/api/api-error-schema";
-import { utils } from "@/utils";
 import PostForm from "@/components/forms/post-form/post-form";
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
 
 export default function EditPost({ slug }: { slug: string }) {
-  let parsedMutateError: ApiError | null = null;
   const router = useRouter();
 
   const { data: postData, isLoading, error: fetchError } = useApiQueries.posts.fetchBySlug(slug);
-  const { mutate: editPost, isPending, error: mutateError } = useApiQueries.posts.edit();
-
-  if (mutateError) {
-    parsedMutateError = utils.errors.parseApiError(mutateError);
-  }
+  const { mutate: editPost, isPending, error: mutateError } = useApiQueries.posts.update();
 
   const onSubmit = (editPostData: PostFormData) => {
     if (!postData) return;
@@ -39,11 +32,9 @@ export default function EditPost({ slug }: { slug: string }) {
   };
 
   if (fetchError) {
-    const parsedFetchError = utils.errors.parseApiError(fetchError);
-
     return (
       <div className="h-dvh w-dvw flex flex-col items-center justify-center">
-        <ApiErrorMessages messages={parsedFetchError.messages} />
+        <ApiErrorMessages messages={fetchError.messages} />
 
         <Button onClick={() => router.back()} variant="outline">
           Voltar
@@ -70,7 +61,7 @@ export default function EditPost({ slug }: { slug: string }) {
           content: postData.content,
         }}
         isPending={isPending}
-        error={parsedMutateError}
+        error={mutateError}
         onSubmit={onSubmit}
       />
     </div>

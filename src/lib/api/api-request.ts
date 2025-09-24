@@ -4,6 +4,7 @@
 
 import { env } from "@/constants/env";
 import { createSupabaseServer } from "@/lib/supabase/supabase-server";
+import { ApiError } from "@/schemas/api/api-error-schema";
 import { utils } from "@/utils";
 
 export async function apiRequest<T>(data: {
@@ -11,7 +12,7 @@ export async function apiRequest<T>(data: {
   fallbackMessage: string;
   requestConfig?: RequestInit;
   requireAuth?: boolean;
-}): Promise<T> {
+}): Promise<T | ApiError> {
   const { endpoint, fallbackMessage, requestConfig: initConfig, requireAuth = true } = data;
 
   try {
@@ -30,7 +31,7 @@ export async function apiRequest<T>(data: {
       } = await supabase.auth.getSession();
 
       if (supabaseError) {
-        throw utils.errors.createApiError({
+        return utils.errors.createApiError({
           message: supabaseError.message,
           statusCode: supabaseError.status,
           error: supabaseError.code,
@@ -38,7 +39,7 @@ export async function apiRequest<T>(data: {
       }
 
       if (!session) {
-        throw utils.errors.createApiError({
+        return utils.errors.createApiError({
           message: "Você precisa estar autenticado",
         });
       }
@@ -59,12 +60,17 @@ export async function apiRequest<T>(data: {
     const result = await response.json();
 
     if (!response.ok) {
-      throw result;
+      return utils.errors.handleApiError({
+        error: result,
+        fallbackMessage,
+      });
     }
 
     return result as T;
   } catch (error: unknown) {
-    throw utils.errors.handleApiError({
+    console.log("🔴 - Erro desconhecido na requisição", error);
+
+    return utils.errors.handleApiError({
       error,
       fallbackMessage,
     });

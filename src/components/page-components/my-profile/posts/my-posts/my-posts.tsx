@@ -5,7 +5,6 @@ import { Text } from "@/components/text/text";
 import { useApiQueries } from "@/hooks/queries";
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
 import { Loader2 } from "lucide-react";
-import { utils } from "@/utils";
 import { PostsTable } from "@/components/posts-table/posts-table";
 
 export const MyPosts = () => {
@@ -14,8 +13,7 @@ export const MyPosts = () => {
   if (isLoading) return <Loader2 className="animate-spin" />;
 
   if (error) {
-    const parsedError = utils.errors.parseApiError(error);
-    return <ApiErrorMessages messages={parsedError.messages} />;
+    return <ApiErrorMessages messages={error.messages} />;
   }
 
   if (!data || data?.length <= 0) {

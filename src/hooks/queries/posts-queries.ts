@@ -1,20 +1,32 @@
 /** @format */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/api";
+import { utils } from "@/utils";
+import { CreatePostDto, Post, UpdatePostDto } from "@/types/posts-types";
+import { ApiError } from "@/schemas/api/api-error-schema";
 
 //------------------ GET ------------------
 const useFetchAllme = () => {
-  return useQuery({
-    queryFn: api.posts.nonCached.fetchAllMe,
+  return useQuery<Post[], ApiError>({
+    queryFn: async () => {
+      const result = await api.posts.nonCached.fetchAllMe();
+      if (utils.errors.isApiError(result)) throw result;
+      return result;
+    },
     queryKey: ["my-posts"],
     staleTime: 1000 * 60 * 60 * 24, // 1 dia
     gcTime: 1000 * 60 * 60 * 24, // 1 dia
+    retry: 1,
   });
 };
 
 const useFetchPostBySlug = (slug: string) => {
-  return useQuery({
-    queryFn: () => api.posts.nonCached.fetchBySlug(slug),
+  return useQuery<Post, ApiError>({
+    queryFn: async () => {
+      const result = await api.posts.nonCached.fetchBySlug(slug);
+      if (utils.errors.isApiError(result)) throw result;
+      return result;
+    },
     queryKey: ["post", slug],
     staleTime: 1000 * 60 * 10, // 10 minutos
     gcTime: 1000 * 60 * 10, // 10 minutos
@@ -25,8 +37,12 @@ const useFetchPostBySlug = (slug: string) => {
 const useCreateNewPost = () => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: api.posts.create,
+  return useMutation<Post, ApiError, CreatePostDto>({
+    mutationFn: async (createPostDto) => {
+      const result = await api.posts.create(createPostDto);
+      if (utils.errors.isApiError(result)) throw result;
+      return result;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-posts"] });
     },
@@ -34,11 +50,15 @@ const useCreateNewPost = () => {
 };
 
 //------------------ PATCH ------------------
-const useEditPost = () => {
+const useUpdatePost = () => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: api.posts.edit,
+  return useMutation<Post, ApiError, UpdatePostDto>({
+    mutationFn: async (UpdatePostDto) => {
+      const result = await api.posts.update(UpdatePostDto);
+      if (utils.errors.isApiError(result)) throw result;
+      return result;
+    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["my-posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", data.slug] });
@@ -49,8 +69,13 @@ const useEditPost = () => {
 const useDeletePost = () => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: api.posts.delete,
+  return useMutation<Post, ApiError, string>({
+    mutationFn: async (postId) => {
+      const result = await api.posts.delete(postId);
+      if (utils.errors.isApiError(result)) throw result;
+      return result;
+    },
+
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["my-posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", data.slug] });
@@ -65,5 +90,5 @@ export const usePosts = {
   create: useCreateNewPost,
 
   delete: useDeletePost,
-  edit: useEditPost,
+  update: useUpdatePost,
 };

@@ -7,12 +7,15 @@ import { revalidateTag } from "next/cache";
 import { postsApiCacheTags } from "./posts-cache";
 import { uploadsApi } from "../uploads";
 import { apiRequest } from "@/lib/api/api-request";
+import { ApiError } from "@/schemas/api/api-error-schema";
+import { utils } from "@/utils";
+import { UploadResponse } from "@/types/upload.types";
 
 const delay = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 //------------------ GET ------------------
-export const fetchAllBase = async (initConfig?: RequestInit): Promise<Post[]> => {
-  const result: Post[] = await apiRequest({
+export const fetchAllBase = async (initConfig?: RequestInit): Promise<Post[] | ApiError> => {
+  return apiRequest({
     requireAuth: false,
     endpoint: "/posts",
     fallbackMessage: "Erro desconhecido ao buscar os posts",
@@ -21,12 +24,10 @@ export const fetchAllBase = async (initConfig?: RequestInit): Promise<Post[]> =>
       ...initConfig,
     },
   });
-
-  return result;
 };
 
-export const fetchAllMeBase = async (initConfig?: RequestInit): Promise<Post[]> => {
-  const result: Post[] = await apiRequest({
+export const fetchAllMeBase = async (initConfig?: RequestInit): Promise<Post[] | ApiError> => {
+  return apiRequest({
     requireAuth: true,
     endpoint: "/posts/me",
     fallbackMessage: "Erro desconhecido ao buscar seus posts",
@@ -35,17 +36,15 @@ export const fetchAllMeBase = async (initConfig?: RequestInit): Promise<Post[]> 
       ...initConfig,
     },
   });
-
-  return result;
 };
 
 export const fetchBySlugBase = async (data: {
   initConfig?: RequestInit;
   slug: string;
-}): Promise<Post> => {
+}): Promise<Post | ApiError> => {
   const { initConfig, slug } = data;
 
-  const result: Post = await apiRequest({
+  return apiRequest({
     requireAuth: false,
     endpoint: `/posts/slug/${slug}`,
     fallbackMessage: "Erro desconhecido ao buscar post",
@@ -54,12 +53,10 @@ export const fetchBySlugBase = async (data: {
       ...initConfig,
     },
   });
-
-  return result;
 };
 
 //------------------ POST ------------------
-export const createNewPost = async (data: CreatePostDto): Promise<Post> => {
+export const createNewPost = async (data: CreatePostDto): Promise<Post | ApiError> => {
   await delay();
 
   let imageUrl: string | undefined;
@@ -67,10 +64,16 @@ export const createNewPost = async (data: CreatePostDto): Promise<Post> => {
   if (data.image instanceof File) {
     const formData = new FormData();
     formData.append("file", data.image);
-    imageUrl = await uploadsApi.uploadFile(formData);
+    const uploadResult: UploadResponse | ApiError = await uploadsApi.uploadFile(formData);
+
+    if (utils.errors.isApiError(uploadResult)) {
+      return uploadResult;
+    }
+
+    imageUrl = uploadResult.url;
   }
 
-  const result: Post = await apiRequest({
+  const result: Post | ApiError = await apiRequest({
     endpoint: `/posts`,
     fallbackMessage: "Erro desconhecido ao criar post",
     requestConfig: {
@@ -82,13 +85,16 @@ export const createNewPost = async (data: CreatePostDto): Promise<Post> => {
     },
   });
 
-  revalidateTag(postsApiCacheTags.createPost());
+  if (utils.errors.isApiError(result)) {
+    return result;
+  }
 
+  revalidateTag(postsApiCacheTags.createPost());
   return result;
 };
 
 //------------------ PATCH ------------------
-export const editPost = async (data: UpdatePostDto): Promise<Post> => {
+export const updatePost = async (data: UpdatePostDto): Promise<Post | ApiError> => {
   const { id: postId, image, ...payloadData } = data;
   let imageUrl: string | undefined = data.imageUrl ?? undefined;
 
@@ -97,10 +103,16 @@ export const editPost = async (data: UpdatePostDto): Promise<Post> => {
   if (image instanceof File) {
     const formData = new FormData();
     formData.append("file", image);
-    imageUrl = await uploadsApi.uploadFile(formData);
+    const uploadResult: UploadResponse | ApiError = await uploadsApi.uploadFile(formData);
+
+    if (utils.errors.isApiError(uploadResult)) {
+      return uploadResult;
+    }
+
+    imageUrl = uploadResult.url;
   }
 
-  const result: Post = await apiRequest({
+  const result: Post | ApiError = await apiRequest({
     endpoint: `/posts/${postId}`,
     fallbackMessage: "Erro desconhecido ao editar post",
     requestConfig: {
@@ -112,16 +124,19 @@ export const editPost = async (data: UpdatePostDto): Promise<Post> => {
     },
   });
 
-  revalidateTag(`post-${result.slug}`);
-  revalidateTag("edit-post");
+  if (utils.errors.isApiError(result)) {
+    return result;
+  }
 
+  revalidateTag(postsApiCacheTags.slug(result.slug));
+  revalidateTag(postsApiCacheTags.updatePost());
   return result;
 };
 
-export const deletePost = async (postid: string | number): Promise<Post> => {
+export const deletePost = async (postid: string): Promise<Post | ApiError> => {
   await delay();
 
-  const result: Post = await apiRequest({
+  const result: Post | ApiError = await apiRequest({
     endpoint: `/posts/soft-delete/${postid}`,
     fallbackMessage: "Erro desconhecido ao editar post",
     requestConfig: {
@@ -129,8 +144,12 @@ export const deletePost = async (postid: string | number): Promise<Post> => {
     },
   });
 
-  revalidateTag("delete-post");
-  revalidateTag(`post-${result.slug}`);
+  if (utils.errors.isApiError(result)) {
+    return result;
+  }
+
+  revalidateTag(postsApiCacheTags.deletePost());
+  revalidateTag(postsApiCacheTags.slug(result.slug));
 
   return result;
 };

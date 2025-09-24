@@ -12,7 +12,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useApiQueries } from "@/hooks/queries";
-import { utils } from "@/utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -47,7 +46,7 @@ export default function LogoutPage() {
             <DialogDescription>Você tem certeza que deseja sair da sua conta?</DialogDescription>
           </DialogHeader>
 
-          {error && <ApiErrorMessages messages={utils.errors.parseApiError(error).messages} />}
+          {error && <ApiErrorMessages messages={error.messages} />}
 
           <div className="w-full flex flex-row gap-2 items-center justify-end pt-4">
             <DialogClose asChild>

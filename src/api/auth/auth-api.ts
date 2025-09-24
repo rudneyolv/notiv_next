@@ -10,20 +10,22 @@ import { LoginDto } from "@/schemas/auth/login-schema";
 import { RegisterDto } from "@/schemas/auth/register-schema";
 import { User } from "@/types/users-types";
 import { utils } from "@/utils";
+import { ApiError } from "@/schemas/api/api-error-schema";
+import { SessionStatus } from "@/types/auth-types";
 
 //TODO: Melhorar validação de sessão
-export const validateSession = async (): Promise<{ logged: boolean }> => {
+export const validateSession = async (): Promise<SessionStatus | ApiError> => {
   try {
     const supabase = await createSupabaseServer();
     const { data } = await supabase.auth.getUser();
-
     return { logged: data.user ? true : false };
   } catch (error: unknown) {
-    throw utils.errors.handleApiError({ error, fallbackMessage: "Erro ao validar sessão" });
+    console.log("Erro desconhecido ao validar sessão", error);
+    return utils.errors.handleApiError({ error, fallbackMessage: "Erro ao validar sessão" });
   }
 };
 
-export const login = async (data: LoginDto): Promise<void> => {
+export const login = async (data: LoginDto): Promise<void | ApiError> => {
   try {
     const supabase = await createSupabaseServer();
 
@@ -33,18 +35,19 @@ export const login = async (data: LoginDto): Promise<void> => {
     });
 
     if (supabaseError) {
-      throw utils.errors.formatSupabaseError(supabaseError);
+      return utils.errors.formatSupabaseError(supabaseError);
     }
   } catch (error) {
-    throw utils.errors.handleApiError({
+    console.log("Erro desconhecido ao efetuar login", error);
+    return utils.errors.handleApiError({
       error,
       fallbackMessage: "Erro desconhecido ao efetuar login",
     });
   }
 };
 
-export const register = async (data: RegisterDto): Promise<User> => {
-  const result: User = await apiRequest({
+export const register = async (data: RegisterDto): Promise<User | ApiError> => {
+  return apiRequest({
     requireAuth: false,
     endpoint: "/users",
     requestConfig: {
@@ -56,32 +59,32 @@ export const register = async (data: RegisterDto): Promise<User> => {
     },
     fallbackMessage: "Erro desconhecido ao registrar",
   });
-
-  return result;
 };
 
-export const logout = async (): Promise<void> => {
+export const logout = async (): Promise<void | ApiError> => {
   try {
     const supabase = await createSupabaseServer();
     const { error: supabaseError } = await supabase.auth.signOut({ scope: "global" });
 
     if (supabaseError) {
-      throw utils.errors.formatSupabaseError(supabaseError);
+      return utils.errors.formatSupabaseError(supabaseError);
     }
   } catch (error: unknown) {
-    throw utils.errors.handleApiError({
+    console.log("Erro desconhecido ao sair da conta", error);
+
+    return utils.errors.handleApiError({
       error,
       fallbackMessage: "Erro desconhecido ao sair da conta",
     });
   }
 };
 
-export const updatePassword = async (data: UpdatePasswordDto) => {
+export const updatePassword = async (data: UpdatePasswordDto): Promise<void | ApiError> => {
   try {
     const parseDtoResult = UpdatePasswordSchema.safeParse(data);
 
     if (!parseDtoResult.success) {
-      throw utils.errors.createApiError({
+      return utils.errors.createApiError({
         message: parseDtoResult.error.errors[0].message ?? "Erro desconhecido ao validar campos",
         error: parseDtoResult.error.message,
       });
@@ -96,11 +99,11 @@ export const updatePassword = async (data: UpdatePasswordDto) => {
     } = await supabase.auth.getUser();
 
     if (getUserError) {
-      throw utils.errors.formatSupabaseError(getUserError);
+      return utils.errors.formatSupabaseError(getUserError);
     }
 
     if (!user?.email) {
-      throw new Error("Sessão inválida. Faça login novamente.");
+      return utils.errors.createApiError({ message: "Sessão inválida. Faça login novamente." });
     }
 
     const { error: signInPasswordError } = await supabase.auth.signInWithPassword({
@@ -114,7 +117,7 @@ export const updatePassword = async (data: UpdatePasswordDto) => {
           ? "Senha atual inválida"
           : signInPasswordError.message;
 
-      throw utils.errors.createApiError({
+      return utils.errors.createApiError({
         message: message,
         error: signInPasswordError.code,
         statusCode: signInPasswordError.status,
@@ -126,23 +129,25 @@ export const updatePassword = async (data: UpdatePasswordDto) => {
     });
 
     if (updatePasswordError) {
-      throw utils.errors.formatSupabaseError(updatePasswordError);
+      return utils.errors.formatSupabaseError(updatePasswordError);
     }
 
     await logout();
   } catch (error: unknown) {
-    throw utils.errors.handleApiError({
+    console.log("Erro desconhecido ao alterar senha", error);
+    return utils.errors.handleApiError({
       error,
       fallbackMessage: "Erro desconhecido ao alterar senha",
     });
   }
 };
 
-export const updateEmail = async (data: UpdateEmailDto) => {
+export const updateEmail = async (data: UpdateEmailDto): Promise<void | ApiError> => {
   try {
     const parseDtoResult = UpdateEmailSchema.safeParse(data);
+
     if (!parseDtoResult.success) {
-      throw utils.errors.createApiError({
+      return utils.errors.createApiError({
         message: parseDtoResult.error.errors[0].message ?? "Erro desconhecido ao validar campos",
         error: parseDtoResult.error.message,
       });
@@ -158,14 +163,16 @@ export const updateEmail = async (data: UpdateEmailDto) => {
           ? "O e-mail deve ser válido."
           : supabaseError.message;
 
-      throw utils.errors.createApiError({
+      return utils.errors.createApiError({
         message: message,
         error: supabaseError.code,
         statusCode: supabaseError.status,
       });
     }
   } catch (error: unknown) {
-    throw utils.errors.handleApiError({
+    console.log("Erro desconhecido ao alterar email", error);
+
+    return utils.errors.handleApiError({
       error,
       fallbackMessage: "Erro desconhecido ao alterar email",
     });

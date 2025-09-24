@@ -8,10 +8,16 @@ import { User } from "@/types/users-types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UpdatePasswordDto } from "@/schemas/auth/update-password-schema";
 import { UpdateEmailDto } from "@/schemas/auth/update-email-schema";
+import { utils } from "@/utils";
+import { SessionStatus } from "@/types/auth-types";
 
 const useValidateSession = () => {
-  return useQuery({
-    queryFn: api.auth.validateSession,
+  return useQuery<SessionStatus, ApiError>({
+    queryFn: async () => {
+      const result = await api.auth.validateSession();
+      if (utils.errors.isApiError(result)) throw result;
+      return result;
+    },
     queryKey: ["logged"],
     gcTime: 86400000, // 1 dia
     staleTime: 86400000, // 1 dia
@@ -23,7 +29,11 @@ const useLogin = () => {
   const queryClient = useQueryClient();
 
   return useMutation<void, ApiError, LoginDto>({
-    mutationFn: api.auth.login,
+    mutationFn: async (LoginDto) => {
+      const result = await api.auth.login(LoginDto);
+      if (utils.errors.isApiError(result)) throw result;
+    },
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["logged"] });
     },
@@ -32,7 +42,11 @@ const useLogin = () => {
 
 const useRegister = () => {
   return useMutation<User, ApiError, RegisterDto>({
-    mutationFn: api.auth.register,
+    mutationFn: async (RegisterDto) => {
+      const result = await api.auth.register(RegisterDto);
+      if (utils.errors.isApiError(result)) throw result;
+      return result;
+    },
   });
 };
 
@@ -40,7 +54,10 @@ const useLogout = () => {
   const queryClient = useQueryClient();
 
   return useMutation<void, ApiError, null>({
-    mutationFn: api.auth.logout,
+    mutationFn: async () => {
+      const result = await api.auth.logout();
+      if (utils.errors.isApiError(result)) throw result;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["logged"] });
     },
@@ -51,7 +68,11 @@ const useUpdatePassword = () => {
   const queryClient = useQueryClient();
 
   return useMutation<void, ApiError, UpdatePasswordDto>({
-    mutationFn: api.auth.updatePassword,
+    mutationFn: async (updatePasswordDto) => {
+      const result = await api.auth.updatePassword(updatePasswordDto);
+      if (utils.errors.isApiError(result)) throw result;
+    },
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["logged"] });
     },
@@ -60,15 +81,18 @@ const useUpdatePassword = () => {
 
 const useUpdateEmail = () => {
   return useMutation<void, ApiError, UpdateEmailDto>({
-    mutationFn: api.auth.updateEmail,
+    mutationFn: async (UpdateEmailDto) => {
+      const result = await api.auth.updateEmail(UpdateEmailDto);
+      if (utils.errors.isApiError(result)) throw result;
+    },
   });
 };
 
 export const useAuth = {
-  validateSession: useValidateSession,
   login: useLogin,
   register: useRegister,
   logout: useLogout,
   updatePassword: useUpdatePassword,
   updateEmail: useUpdateEmail,
+  validateSession: useValidateSession,
 };

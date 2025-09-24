@@ -2,9 +2,9 @@
 
 import { Suspense } from "react";
 import { Text } from "@/components/text/text";
-import PostDetails from "@/components/page-components/post/post-details/post-details";
 import Link from "next/link";
 import { ArrowUpCircle } from "lucide-react";
+import { PostDetails } from "@/components/page-components/post/post-details/post-details";
 
 interface PostPageParams {
   params: Promise<{ slug: string }>;

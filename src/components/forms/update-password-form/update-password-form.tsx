@@ -19,7 +19,6 @@ import { FormContainerStyles, FormStyles } from "../default-styles";
 import { Button } from "@/components/ui/button";
 import { useApiQueries } from "@/hooks/queries";
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
-import { utils } from "@/utils";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -86,7 +85,7 @@ export function UpdatePasswordForm() {
             )}
           />
 
-          {error && <ApiErrorMessages messages={utils.errors.parseApiError(error).messages} />}
+          {error && <ApiErrorMessages messages={error.messages} />}
 
           <Button isLoading={isPending} className="w-full">
             Confirmar alteração

@@ -6,19 +6,11 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PostForm from "@/components/forms/post-form/post-form";
 import { useApiQueries } from "@/hooks/queries";
-import { ApiError } from "@/schemas/api/api-error-schema";
-import { utils } from "@/utils";
 
 export default function NewPost() {
-  let parsedError: ApiError | null = null;
-
   const router = useRouter();
 
   const { mutate: createPost, isPending, error } = useApiQueries.posts.create();
-
-  if (error) {
-    parsedError = utils.errors.parseApiError(error);
-  }
 
   const onSubmit = async (postData: PostFormData) => {
     createPost(postData, {
@@ -31,7 +23,7 @@ export default function NewPost() {
 
   return (
     <div className="mt-8">
-      <PostForm isPending={isPending} error={parsedError} onSubmit={onSubmit} />
+      <PostForm isPending={isPending} error={error} onSubmit={onSubmit} />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { NextCacheConfig } from "@/types/cache-types";
 export const postsApiCacheTags = {
   posts: (): "posts" => "posts",
   deletePost: (): "delete-post" => "delete-post",
-  editPost: (): "edit-post" => "edit-post",
+  updatePost: (): "update-post" => "update-post",
   createPost: (): "create-post" => "create-post",
   slug: (slug: string): `post-${string}` => `post-${slug}`,
 };
@@ -18,7 +18,7 @@ export const postsApiCacheOptions = {
       tags: [
         postsApiCacheTags.posts(),
         postsApiCacheTags.deletePost(),
-        postsApiCacheTags.editPost(),
+        postsApiCacheTags.updatePost(),
         postsApiCacheTags.createPost(),
       ],
     },

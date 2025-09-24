@@ -16,7 +16,6 @@ import { FormContainerStyles, FormStyles } from "../default-styles";
 import { Button } from "@/components/ui/button";
 import { useApiQueries } from "@/hooks/queries";
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
-import { utils } from "@/utils";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -67,7 +66,7 @@ export function UpdateEmailForm() {
             Abra-o para concluir a atualização do seu e-mail.
           </Text>
 
-          {error && <ApiErrorMessages messages={utils.errors.parseApiError(error).messages} />}
+          {error && <ApiErrorMessages messages={error.messages} />}
 
           <Button isLoading={isPending} className="w-full">
             Confirmar alteração

@@ -17,7 +17,6 @@ import InputPassword from "@/components/ui/input-password";
 import { env } from "@/constants/env";
 import { useApiQueries } from "@/hooks/queries";
 import { RegisterDto, RegisterSchema } from "@/schemas/auth/register-schema";
-import { utils } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -98,7 +97,7 @@ export function RegisterForm() {
           )}
         />
 
-        {error && <ApiErrorMessages messages={utils.errors.parseApiError(error).messages} />}
+        {error && <ApiErrorMessages messages={error.messages} />}
 
         {env.NEXT_PUBLIC_ALLOW_NEW_USERS === "0" && (
           <Text className="text-destructive">O cadastro de novos usuários está desabilitado</Text>

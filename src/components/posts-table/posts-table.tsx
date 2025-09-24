@@ -34,7 +34,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ApiErrorMessages } from "../api-error-messages/api-error-messages";
-import { utils } from "@/utils";
 
 export function PostsTable({ posts }: { posts: Post[] }) {
   const router = useRouter();
@@ -186,7 +185,7 @@ export function PostsTable({ posts }: { posts: Post[] }) {
             </DialogDescription>
           </DialogHeader>
 
-          {error && <ApiErrorMessages messages={utils.errors.parseApiError(error).messages} />}
+          {error && <ApiErrorMessages messages={error.messages} />}
 
           <div className="w-full flex flex-row gap-2 items-center justify-end pt-4">
             <DialogClose asChild>

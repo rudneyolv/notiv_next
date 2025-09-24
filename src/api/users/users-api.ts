@@ -2,23 +2,24 @@
 "use server";
 
 import { apiRequest } from "@/lib/api/api-request";
+import { ApiError } from "@/schemas/api/api-error-schema";
 import { UpdateProfileDto } from "@/schemas/users/update-profile-schema";
 import { User } from "@/types/users-types";
 
-export const getCurrentUser = async () => {
-  const result: User = await apiRequest({
+export const getCurrentUser = async (): Promise<User | ApiError> => {
+  return apiRequest({
     endpoint: "/users/me",
     requestConfig: {
       method: "GET",
     },
     fallbackMessage: "Erro ao buscar o seu perfil",
   });
-
-  return result;
 };
 
-export const updateProfile = async (updateProfileDto: UpdateProfileDto) => {
-  const result: User = await apiRequest({
+export const updateProfile = async (
+  updateProfileDto: UpdateProfileDto
+): Promise<User | ApiError> => {
+  return apiRequest({
     endpoint: "/users/me",
     requestConfig: {
       method: "PATCH",
@@ -29,6 +30,4 @@ export const updateProfile = async (updateProfileDto: UpdateProfileDto) => {
     },
     fallbackMessage: "Erro ao editar perfil",
   });
-
-  return result;
 };

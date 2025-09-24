@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import InputPassword from "@/components/ui/input-password";
 import { useApiQueries } from "@/hooks/queries";
 import { LoginDto, LoginSchema } from "@/schemas/auth/login-schema";
-import { utils } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -82,7 +81,7 @@ export function LoginForm() {
           )}
         />
 
-        {error && <ApiErrorMessages messages={utils.errors.parseApiError(error).messages} />}
+        {error && <ApiErrorMessages messages={error.messages} />}
 
         <Button className="w-full" type="submit" isLoading={isPending}>
           Login

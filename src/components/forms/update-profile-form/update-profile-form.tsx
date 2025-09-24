@@ -16,7 +16,6 @@ import { FormContainerStyles, FormStyles } from "../default-styles";
 import { Button } from "@/components/ui/button";
 import { useApiQueries } from "@/hooks/queries";
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
-import { utils } from "@/utils";
 import { toast } from "sonner";
 import { UpdateProfileDto, UpdateProfileSchema } from "@/schemas/users/update-profile-schema";
 import { User } from "@/types/users-types";
@@ -69,7 +68,7 @@ export function UpdateProfileForm({ userData }: { userData?: User }) {
             dados refletir nos seus posts.
           </Text>
 
-          {error && <ApiErrorMessages messages={utils.errors.parseApiError(error).messages} />}
+          {error && <ApiErrorMessages messages={error.messages} />}
 
           <Button isLoading={isPending} className="w-full">
             Confirmar alterações

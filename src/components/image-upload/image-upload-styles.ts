@@ -10,14 +10,16 @@ export const ImageUploadStyles = cva(
 
     transition-colors duration-500
 
-    relative rounded-xl
+    rounded-xl
     border-2 border-dashed border-accent
 
     data-[status=error]:border-destructive
     data-[status=hover]:border-accent
     data-[status=ready]:border-green-700
 
-    w-full h-56
+    w-full h-64
+    p-4
+
 
     flex flex-col items-center justify-center gap-1
   `
@@ -28,7 +30,7 @@ export const PreviewContainer = cva(
     group
     relative
     flex flex-col items-center justify-center gap-2
-    max-w-[350px] max-h-[200px] overflow-hidden
+    max-w-xs h-full
 
     transition-translate duration-500 will-change-transform
     hover:-translate-y-1
@@ -38,7 +40,8 @@ export const PreviewContainer = cva(
 
 export const PreviewImage = cva(
   `
-    relative w-full h-full
+    w-full h-full
+    max-h-48
     brightness-75 rounded-xl
     transition-shadow duration-500
     group-hover:shadow-md
@@ -47,7 +50,9 @@ export const PreviewImage = cva(
 
 export const CloseButton = cva(
   `
-    absolute top-0 right-0
+    absolute top-1 right-1
+    bg-accent/30
+    rounded-sm
     transition-colors duration-500
     hover:text-destructive
   `

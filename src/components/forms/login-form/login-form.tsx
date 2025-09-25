@@ -2,6 +2,7 @@
 "use client";
 
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
+import { Text } from "@/components/text/text";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,6 +17,7 @@ import InputPassword from "@/components/ui/input-password";
 import { useApiQueries } from "@/hooks/queries";
 import { LoginDto, LoginSchema } from "@/schemas/auth/login-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -86,6 +88,14 @@ export function LoginForm() {
         <Button className="w-full" type="submit" isLoading={isPending}>
           Login
         </Button>
+
+        <div className="w-full flex flex-row gap-1 justify-center">
+          <Text className="text-muted-foreground">Não possui uma conta?</Text>
+
+          <Link href="/register" className="hover:text-purple-400">
+            Registre-se
+          </Link>
+        </div>
       </form>
     </Form>
   );

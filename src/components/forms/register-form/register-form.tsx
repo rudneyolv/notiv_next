@@ -18,6 +18,7 @@ import { env } from "@/constants/env";
 import { useApiQueries } from "@/hooks/queries";
 import { RegisterDto, RegisterSchema } from "@/schemas/auth/register-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
@@ -106,6 +107,14 @@ export function RegisterForm() {
         <Button className="w-full" type="submit" isLoading={isPending}>
           Registrar-se
         </Button>
+
+        <div className="w-full flex flex-row gap-1 justify-center">
+          <Text className="text-muted-foreground">Já possui uma conta?</Text>
+
+          <Link href="/login" className="hover:text-purple-400">
+            Entrar
+          </Link>
+        </div>
       </form>
     </Form>
   );

@@ -1,8 +1,10 @@
 /** @format */
 
 import { api } from "@/api";
+import { postsApiCacheTags } from "@/api/posts/posts-cache";
 import { ApiErrorMessages } from "@/components/api-error-messages/api-error-messages";
 import { PostCard } from "@/components/blocks/post-card";
+import { RetryForm } from "@/components/forms/retry-form/retry-form";
 import { Text } from "@/components/text/text";
 import { images } from "@/constants/images-constants";
 import { utils } from "@/utils";
@@ -11,7 +13,14 @@ import { formatDatetime, formatRelativeDateToNow } from "@/utils/format-datetime
 export const PostsList = async () => {
   const result = await api.posts.cached.fetchAll();
 
-  if (utils.errors.isApiError(result)) return <ApiErrorMessages messages={result.messages} />;
+  if (utils.errors.isApiError(result)) {
+    return (
+      <div className="flex flex-col gap-0">
+        <ApiErrorMessages messages={result.messages} />
+        <RetryForm revalidationTag={postsApiCacheTags.posts()} />
+      </div>
+    );
+  }
 
   if (result.length === 0) {
     return <Text>Nenhum post foi encontrado...</Text>;

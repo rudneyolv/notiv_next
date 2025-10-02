@@ -4,16 +4,37 @@
 "use server";
 
 import { utils } from "@/utils";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { headers } from "next/headers";
 
 export async function revalidateTagAction(formData: FormData) {
-  const encryptedTag = formData.get("tag") as string;
-  const decryptedTag = await utils.tagsEncryption.decrypt(encryptedTag);
+  const encryptedPayload = formData.get("payload") as string;
 
-  if (!decryptedTag) {
-    console.warn(`🔴 - Tag inválida recebida. Revalidação sem sucesso`);
+  // 1. VALIDAÇÃO DO PAYLOAD
+  if (!encryptedPayload) return;
+
+  const revalidateData = await utils.tagsEncryption.decrypt(encryptedPayload);
+
+  if (!revalidateData) {
+    console.warn(`Payload de revalidação inválido recebido.`);
     return;
   }
 
-  revalidateTag(encryptedTag);
+  const { tag, path: expectedPath } = revalidateData;
+
+  // 2. VERIFICAÇÃO DE CONTEXTO (Payload está sendo usado no lugar certo)
+  const headersList = await headers();
+  const referer = headersList.get("referer");
+
+  const actualPath = referer ? new URL(referer).pathname : null;
+
+  if (expectedPath !== actualPath) {
+    console.warn(
+      `Tentativa de revalidação cross-page detectada! Payload para o path '${expectedPath}' foi usado no path '${actualPath}'.`
+    );
+    return;
+  }
+
+  revalidateTag(tag);
+  revalidatePath(expectedPath);
 }

@@ -22,7 +22,7 @@ export async function PostDetails({ slug }: PostDetailsProps) {
     return (
       <div className="flex flex-col gap-0">
         <ApiErrorMessages messages={result.messages} />
-        <RetryForm revalidationTag={postsApiCacheTags.slug(slug)} />
+        <RetryForm revalidateData={{ tag: postsApiCacheTags.slug(slug), path: `/post/${slug}` }} />
       </div>
     );
   }

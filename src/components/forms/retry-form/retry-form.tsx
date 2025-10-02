@@ -1,19 +1,17 @@
 /** @format */
+"use server";
 
 import { revalidateTagAction } from "@/actions/custom-revalidate-tag";
 import { RetryButton } from "./_components/retry-button";
 import { utils } from "@/utils";
+import { RevalidateData } from "@/utils/tags-encryption/tags-encryption";
 
-interface RetryFormProps {
-  revalidationTag: string;
-}
-
-export async function RetryForm({ revalidationTag }: RetryFormProps) {
-  const encryptedTag = await utils.tagsEncryption.encrypt(revalidationTag);
+export async function RetryForm({ revalidateData }: { revalidateData: RevalidateData }) {
+  const encryptedPayload = await utils.tagsEncryption.encrypt(revalidateData);
 
   return (
     <form action={revalidateTagAction}>
-      <input type="hidden" name="tag" value={encryptedTag} />
+      <input type="hidden" name="payload" value={encryptedPayload} />
       <RetryButton />
     </form>
   );

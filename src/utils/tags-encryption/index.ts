@@ -1,8 +1,8 @@
 /** @format */
 
-import { decryptTag, encryptTag } from "./tags-encryption";
+import { decryptPayload, encryptPayload } from "./tags-encryption";
 
 export const tagsEncryptionUtils = {
-  encrypt: encryptTag,
-  decrypt: decryptTag,
+  encrypt: encryptPayload,
+  decrypt: decryptPayload,
 };

@@ -17,7 +17,7 @@ export const PostsList = async () => {
     return (
       <div className="flex flex-col gap-0">
         <ApiErrorMessages messages={result.messages} />
-        <RetryForm revalidationTag={postsApiCacheTags.posts()} />
+        <RetryForm revalidateData={{ tag: postsApiCacheTags.posts(), path: "/" }} />
       </div>
     );
   }

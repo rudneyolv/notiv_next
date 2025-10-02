@@ -2,12 +2,13 @@
 
 import { LoginForm } from "@/components/forms/login-form/login-form";
 import { Metadata } from "next";
+import { env } from "node:process";
 
 export const metadata: Metadata = {
   title: "Login",
   description: "Acesse sua conta na Notiv.",
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/login`,
+    canonical: `${env.NEXT_PUBLIC_FRONTEND_URL}/login`,
   },
 };
 

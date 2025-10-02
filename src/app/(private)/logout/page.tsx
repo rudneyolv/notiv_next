@@ -1,6 +1,7 @@
 /** @format */
 
 import LogoutDialog from "@/components/page-components/logout/logout-dialog/logout-dialog";
+import { clientEnv } from "@/constants/env";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
     follow: false,
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/logout`,
+    canonical: `${clientEnv.NEXT_PUBLIC_FRONTEND_URL}/logout`,
   },
 };
 

@@ -2,7 +2,7 @@
 
 "use server";
 
-import { env } from "@/constants/env";
+import { clientEnv } from "@/constants/env";
 import { createSupabaseServer } from "@/lib/supabase/supabase-server";
 import { ApiError } from "@/schemas/api/api-error-schema";
 import { utils } from "@/utils";
@@ -16,7 +16,9 @@ export async function apiRequest<T>(data: {
   const { endpoint, fallbackMessage, requestConfig: initConfig, requireAuth = true } = data;
 
   try {
-    const url = `${env.NEXT_PUBLIC_API_URL}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
+    const url = `${clientEnv.NEXT_PUBLIC_API_URL}${
+      endpoint.startsWith("/") ? endpoint : `/${endpoint}`
+    }`;
 
     let headers: HeadersInit = {
       ...initConfig?.headers,

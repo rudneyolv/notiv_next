@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MyPosts } from "@/components/page-components/my-profile/posts/my-posts/my-posts";
 import { Metadata } from "next";
+import { clientEnv } from "@/constants/env";
 
 export const metadata: Metadata = {
   title: "Meus posts",
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     follow: false,
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/my-profile/posts`,
+    canonical: `${clientEnv.NEXT_PUBLIC_FRONTEND_URL}/my-profile/posts`,
   },
 };
 

@@ -8,8 +8,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().default(""),
   NEXT_PUBLIC_SUPABASE_KEY: z.string().default(""),
   NEXT_PUBLIC_SUPABASE_PROJECT_ID: z.string().default(""),
-  NEXT_PUBLIC_ALLOW_NEW_USERS: z.string().default("0"),
-  NEXT_REVALIDATION_SECRET: z.string().min(44),
+  // NEXT_REVALIDATION_SECRET: z.string().min(44),
 });
 
-export const env = envSchema.parse(process.env);
+export const clientEnv = envSchema.parse(process.env);

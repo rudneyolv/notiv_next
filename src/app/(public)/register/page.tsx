@@ -1,13 +1,14 @@
 /** @format */
 
 import { RegisterForm } from "@/components/forms/register-form/register-form";
+import { clientEnv } from "@/constants/env";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Registrar",
   description: "Crie sua conta na Notiv.",
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/register`,
+    canonical: `${clientEnv.NEXT_PUBLIC_FRONTEND_URL}/register`,
   },
 };
 

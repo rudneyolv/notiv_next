@@ -2,7 +2,6 @@
 "use server";
 
 // /lib/crypto.ts
-import { env } from "@/constants/env";
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "crypto";
 
 export interface RevalidateData {
@@ -10,7 +9,13 @@ export interface RevalidateData {
   path: string;
 }
 
-const secret = env.NEXT_REVALIDATION_SECRET;
+const secret = process.env.NEXT_REVALIDATION_SECRET;
+
+if (!secret)
+  throw new Error(
+    "A variável de ambiente NEXT_REVALIDATION_SECRET é obrigatória para a criptografia de tags."
+  );
+
 const algorithm = "aes-256-gcm";
 const ivLength = 16;
 

@@ -7,7 +7,7 @@ import { PostDetails } from "@/components/page-components/post/post-details/post
 import { Metadata } from "next";
 import { api } from "@/api";
 import { utils } from "@/utils";
-import { env } from "@/constants/env";
+import { clientEnv } from "@/constants/env";
 
 interface PostPageParams {
   params: Promise<{ slug: string }>;
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PostPageParams): Promise<Meta
     description: result.summary,
 
     alternates: {
-      canonical: `${env.NEXT_PUBLIC_FRONTEND_URL}/${slug}`,
+      canonical: `${clientEnv.NEXT_PUBLIC_FRONTEND_URL}/${slug}`,
     },
   };
 }

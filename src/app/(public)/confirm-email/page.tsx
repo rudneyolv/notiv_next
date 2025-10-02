@@ -2,6 +2,7 @@
 
 import { Heading } from "@/components/heading/heading";
 import { Text } from "@/components/text/text";
+import { clientEnv } from "@/constants/env";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
     follow: false,
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/login`,
+    canonical: `${clientEnv.NEXT_PUBLIC_FRONTEND_URL}/login`,
   },
 };
 

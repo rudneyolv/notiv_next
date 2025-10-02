@@ -2,6 +2,7 @@
 
 import { Heading } from "@/components/heading/heading";
 import { EditProfileHeader } from "@/components/page-components/my-profile/edit/edit-profile-header/edit-profile-header";
+import { clientEnv } from "@/constants/env";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
     follow: false,
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/my-profile/edit`,
+    canonical: `${clientEnv.NEXT_PUBLIC_FRONTEND_URL}/my-profile/edit`,
   },
 };
 

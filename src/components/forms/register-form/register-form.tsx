@@ -104,9 +104,9 @@ export function RegisterForm() {
         </Button>
 
         <div className="w-full flex flex-row gap-1 justify-center">
-          <Text className="text-muted-foreground">Já possui uma conta?</Text>
+          <Text className="text-sm text-muted-foreground">Já possui uma conta?</Text>
 
-          <Link href="/login" className="hover:text-purple-400">
+          <Link href="/login" className="text-sm hover:text-purple-400">
             Entrar
           </Link>
         </div>

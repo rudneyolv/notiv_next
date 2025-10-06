@@ -38,7 +38,7 @@ export default async function PostPage({ params }: PostPageParams) {
   const { slug } = await params;
 
   return (
-    <div className="w-full min-h-screen bg-zinc-900 flex items-center justify-center">
+    <div className="w-full min-h-screen bg-background flex items-center justify-center">
       <div className=" w-full max-w-5xl flex flex-col items-center gap-2 p-8">
         <Suspense fallback={<Loader2 className="animate-spin size-10" />}>
           <PostDetails slug={slug} />

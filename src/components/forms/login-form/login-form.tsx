@@ -90,9 +90,9 @@ export function LoginForm() {
         </Button>
 
         <div className="w-full flex flex-row gap-1 justify-center">
-          <Text className="text-muted-foreground">Não possui uma conta?</Text>
+          <Text className="text-sm text-muted-foreground">Não possui uma conta?</Text>
 
-          <Link href="/register" className="hover:text-purple-400">
+          <Link href="/register" className="text-sm hover:text-purple-400">
             Registre-se
           </Link>
         </div>

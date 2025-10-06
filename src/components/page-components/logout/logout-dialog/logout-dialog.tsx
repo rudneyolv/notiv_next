@@ -26,6 +26,7 @@ export default function LogoutDialog() {
       onSuccess: () => {
         setIsOpen(false);
         toast.success("Deslogado com sucesso!");
+        router.back();
       },
     });
   };
@@ -41,7 +42,7 @@ export default function LogoutDialog() {
         }}
       >
         <DialogContent>
-          <DialogHeader>
+          <DialogHeader className="items-start">
             <DialogTitle>Você tem certeza?</DialogTitle>
             <DialogDescription>Você tem certeza que deseja sair da sua conta?</DialogDescription>
           </DialogHeader>

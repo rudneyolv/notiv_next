@@ -7,19 +7,19 @@ export const EditProfileRoutes: Route[] = [
   {
     href: "/my-profile/edit",
     Icon: CircleUserRound,
-    label: "Editar perfil",
+    label: "Perfil",
     type: "direct",
   },
   {
     href: "/my-profile/edit/password",
     Icon: Lock,
-    label: "Alterar senha",
+    label: "Senha",
     type: "direct",
   },
   {
     href: "/my-profile/edit/email",
     Icon: Mail,
-    label: "Alterar Email",
+    label: "Email",
     type: "direct",
   },
 ];

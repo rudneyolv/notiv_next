@@ -23,8 +23,8 @@ export const metadata: Metadata = {
 
 export default function AdminPosts() {
   return (
-    <div className="min-h-screen flex flex-col items-center">
-      <div className="w-full max-w-3xl p-12 flex flex-col items-center gap-2">
+    <div className="min-h-screen flex flex-col items-center p-6">
+      <div className="w-full max-w-2xl flex flex-col items-center gap-2">
         <div className="flex flex-row justify-between items-center w-full">
           <Text className="font-semibold">Posts</Text>
           <Link href="posts/new">

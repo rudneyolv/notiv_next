@@ -136,7 +136,7 @@ export function PostsTable({ posts }: { posts: Post[] }) {
   });
 
   return (
-    <div className="p-4 rounded-xl shadow-xl">
+    <div className="p-4 rounded-xl shadow-xl w-full">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
